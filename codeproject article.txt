@@ -1,0 +1,1213 @@
+<ul class="Download"><li><a href="WizardForm/WizardDemo.zip">Download WizardDemo - 306.63 KB</a></li></ul>
+<img src="WizardForm/AppScreenshot.png" />
+<p>
+
+
+</p><h2>Introduction</h2>
+
+<p>In my current job, I'll soon be working on a task where we're going to convert hundreds forms in an Oracle Forms application to a 
+WinForms .Net application.  There are a couple of &quot;wizards&quot; in the existing app, but when I went looking in the templates 
+for a Wizard form, imagine my dismay when I didn't find one.  Despite my best efforts, I also couldn't find anything that was a) 
+lightweight, b) contained &quot;enough&quot; features, or c) worked all the time.  There are a couple of articles here on CP, but 
+none of them felt right for me.  Since I'm still learning .Net, I figured this would be a good opportunity to create my own wizard 
+code.  Along the way, I learned a few new niggles about WinForms.</p>
+
+<p><small>Code Formatting Disclaimer: In an attempt to keep the width of the &lt;pre&gt; blocks to something reasonable, I changed 
+the formatting you see in this article and in some cases, removed several &quot;this.&quot; qualifiers.  The actual code in the 
+source files will look different.</small></p>
+
+<h2>The Concept</h2>
+
+<p>Essentially, this code doesn't establish any innovative methods or new ideas where your garden variety wizard form is concerned, 
+there's no clever designer integration, and you still have to actually write a bit of code to &quot;make it go&quot;.  Here's a 
+feature list:</p>
+
+<ul><li>A graphic panel that allows you to provide some eye-candy via a (optional) gradient background, and support for an (optional) 
+image (nothing new here)</li>
+
+<li>Specify text for a title and/or subtitle, as well as the ability to configure the font and color of the text (nothing new here)
+</li>
+<li>Support for multiple possible paths through the wizard (nothing new here)</li>
+<li>Efficient tracking of visited pages (nothing new here)</li>
+<li>Re-sizes the wizard form to accommodate the largest wizard page</li></ul>
+
+<p>Implementation is about as simple as I could make it, but there's at least one thing I did that I'd wished I could have done a 
+different way.  I'll point it out in the ensuing discussions regarding the base classes.</p>
+
+<h3>Techniques Use</h3>
+
+<p>The following techniques were utilized in order to implement this code:</p>
+
+<ul><li>Inheritance (deriving <code>Form</code> and <code>UserControl</code> classes)</li>
+<li>Polymorphism (multiple wizard pages deriving from the same base class)</li>
+<li>Encapsulation (utilizing public, protected, and private data members and methods)</li>
+<li>Custom events</li>
+<li>In-designer detection</li>
+<li>Custom drawing and image display</li>
+<li>Programmatic form resizing</li></ul>
+
+
+<h2>The WizardFormLib Assembly</h2>
+
+<p>Keeping things compartmentalized is always a good idea, so I put all of the base code into this assembly. It's comprised of a few 
+support classes and the two primary classes, <code>WizardFormBase</code>, and <code>WizardPage</code></p>
+
+<h3>The Page Chain</h3>
+
+<p>One of the aspects of a wizard is the desire to maintain some sort of list of pages that have been visited.  This becomes even 
+more important if the wizard presents multiple data-driven paths from the start page to the stop page. It's pretty obvious that you 
+have to maintain a list of the pages, but it would be highly inefficient to maintain a list of ALL of the pages in the wizard when 
+you 're not going to necessarily visit all of them.  So, the <code>WizardPageChain</code> class is what I came up with to resolve the 
+issues.</p>
+
+<p>This is a fairly simple class, and simply manages the list of pages as they are visited.  When a page is visited (when the user 
+starts the wizard or clicks the <code>Next</code> button), it is added to the end of the list, and it is considered to be the 
+&quot;current page&quot;.  If the user clicks the <code>Back</code> button, the page is removed from the end of the list, and the new 
+last page in the list is considered the &quot;current page&quot;. It's really nothing more than a fancy queue.  The code is as 
+follows (comments were omitted in the interest of brevity), and can be found in the file 
+
+<code>WizardFormLib.WizardPageChain.cs</code>:</p>
+
+<pre>public class WizardPageChain
+{
+	private List&lt;object&gt; m_pageChain = new List&lt;object&gt;();
+	private WizardFormBase m_parent = null;
+
+	//--------------------------------------------------------------------------------
+	public int Count
+	{
+		get { return m_pageChain.Count; }
+	}
+
+	//--------------------------------------------------------------------------------
+	public WizardPage CurrentPage
+	{
+		get 
+		{ 
+			if (this.Count &gt; 0)
+			{
+				return (WizardPage)this.m_pageChain[this.Count-1]; 
+			}
+			else
+			{
+				throw new Exception(&quot;No pages in page chain list.&quot;);
+			}
+		}
+	}
+
+	//--------------------------------------------------------------------------------
+	public WizardPageChain(WizardFormBase parent)
+	{
+		m_parent = parent;
+		this.m_pageChain.Clear();
+	}
+
+	//--------------------------------------------------------------------------------
+	public WizardPage GoBack()
+	{
+		if (this.Count &gt; 1)
+		{
+			this.CurrentPage.Visible = false;
+			this.m_pageChain.RemoveAt(this.Count - 1);
+		}
+		else
+		{
+			throw new Exception(&quot;No pages in page chain list.&quot;);
+		}
+		WizardPage currentPage = this.CurrentPage;
+		currentPage.Visible = true;
+		return currentPage;
+	}
+
+	//--------------------------------------------------------------------------------
+	public WizardPage GoNext(WizardPage nextPage)
+	{
+		m_pageChain.Add(nextPage);
+		WizardPage currentPage = this.CurrentPage;
+		if (this.Count &gt; 1)
+		{
+			((WizardPage)(m_pageChain[this.Count-2])).Visible = false;
+		}
+		currentPage.Visible = true;
+		return currentPage;
+	}
+
+	//--------------------------------------------------------------------------------
+	public WizardPage SaveData()
+	{
+		WizardPage invalidPage = null;
+		foreach (WizardPage page in m_pageChain)
+		{
+			if (!page.SaveData())
+			{
+				invalidPage = page;
+				break;
+			}
+		}
+		return invalidPage;
+	}
+}
+</pre>
+
+<h3>Events, Handlers, and Arguments</h3>
+
+<p>To facilitate page/form interaction, I implemented a few custom events. These elements aren't at all remarkable, and are only 
+mentioned here in the interest of completeness.  Their names should be reasonably descriptive of their reason for being.</p>
+
+<pre>public delegate void WizardPageActivateHandler(object sender, WizardPageActivateArgs e);
+public delegate void WizardPageChangeHandler(object sender, WizardPageChangeArgs e);
+public delegate void WizardPageCreatedHandler(object sender, WizardPageCreatedArgs e);
+
+public class WizardPageActivateArgs : EventArgs
+{
+	private WizardPage m_activePage		= null;
+	private WizardStepType m_stepType	= WizardStepType.None;
+
+	public WizardPage ActivatedPage
+	{
+		get { return m_activePage; }
+	}
+	public WizardStepType StepType
+	{
+		get { return m_stepType; }
+	}
+
+	public WizardPageActivateArgs(WizardPage page, WizardStepType step)
+	{
+		m_activePage	= page;
+		m_stepType	= step;
+	}
+}
+
+public class WizardPageChangeArgs : EventArgs
+{
+	private WizardPage	m_activePage	= null;
+	private WizardStepType	m_stepType	= WizardStepType.None;
+
+	public WizardStepType StepType
+	{
+		get { return m_stepType; }
+	}
+	public WizardPage ActivatedPage
+	{
+		get { return m_activePage; }
+	}
+
+	public WizardPageChangeArgs(WizardPage page, WizardStepType step)
+	{
+		m_activePage	= page;
+		m_stepType	= step;
+	}
+}
+
+public class WizardPageCreatedArgs : EventArgs
+{
+	private Size m_size;
+
+	public Size Size
+	{
+		get { return m_size; }
+	}
+
+	public WizardPageCreatedArgs(Size size)
+	{
+		m_size = size;
+	}
+}
+</pre>
+
+<h3>WizardFormBase - The Base Form Class</h3>
+
+<img height="330" width="388" src="WizardForm/WizardFormDesigner.png" alt="WizardFormDesigner.png" />
+
+<p>The form template (seen above) is just wide enough to contain the four buttons on the form. The reason is that the wizard pages 
+will ultimately define the size of the form.  As you can see, there are two <code>Panel</code> containers, two separators, and a pair 
+<code>Label</code> controls, as well as the four required wizard buttons.  The top panel is docked at the top of the form, and the 
+top separator line is docked under the top panel. The <code>pagePanel</code> container and the lower separator line are anchored to 
+the right, and bottom edges of the form, as are the buttons.  The form itself is not re-sizable by the user, but since our form 
+changes size so that it can conform to the largest axis of all of the combined pages, we need to set these anchors.  Before we talk 
+about the code itself, lets talk about the top panel container.</p>
+
+<p>The top panel is where we put our eye candy.  You have the option of using a solid background, or a gradient, along with an 
+optional image that can be displayed in one of three positions - the left side, the right side, or the center.  The position of the 
+image dictates which edge the gradient starts on. Assuming white as the background color, and dark slate blue as the gradient color, 
+here's the way the gradient will be painted. </p>
+
+<img height="702" width="640" src="WizardForm/GradientExample.png" alt="GradientExample.png" />
+
+<p>Notice also that the title/subtitle text automatically positions itself depending on the position of the bitmap. In the event that 
+you use a centered image, the title/subtitle text components aren't painted at all.  Finally, the image itself is re-size to fit the 
+height of the panel. In the event that the re-sized bitmap is too long to fit within the width of the form, it will simply be clipped 
+at the edges of the form.</p>
+
+<p>The actual code that comprises the <code>WizardFormBase</code> class is mostly comprised of properties, data members, and methods 
+to show/hide and enable/disable the buttons. The largest single chunk of code deals exclusively with the painting of the top graphic 
+panel and the title/subtitle text for a given wizard page.  Those are the two methods we'll talk about first.</p>
+
+<p>To draw the panel itself, we intercept the <code>Paint</code> event.  The first thing we do is gather our components around us so 
+they're within easy reach:</p>
+
+<pre>private void graphicPanelTop_Paint(object sender, PaintEventArgs e)
+{
+    // define all of our structures
+    // to ease typing, let's graph the graphics object from the arguments
+    Graphics  g         = e.Graphics;
+
+    // our graphic panel image - set to null because we don't know yet if we even 
+    // need it.
+    Bitmap    image     = null;
+
+    // The rectangle of the image - initialize to &quot;nothing&quot; because we don't have 
+    // the image yet
+    Rectangle imageRect = new Rectangle(0, 0, 0, 0);
+
+    // the rectangle of the container panel itself
+    Rectangle panelRect	= new Rectangle(0, 0, 
+                                        this.graphicPanelTop.Width, 
+                                        this.graphicPanelTop.Height);
+
+    // the rectange to be used for the gradient - by default, it's the same as 
+    // the panel
+    Rectangle gradientRect      = new Rectangle(0, 0, panelRect.Width, panelRect.Height);
+
+    // the brush used to paint the gradient - set to null because we don't know 
+    // yet if we need it
+    Brush     gradientBrush     = null;
+
+    // the gradient direction 0 = left-to-right, 180=right-to-left
+    int       gradientDirection = 0;
+
+    // shorter way to know if we need to paint the gradient if the two colors 
+    // don't match, this variable will be true.
+    bool      needGradient      = (this.GraphicPanelGradientColor != 
+                                   this.GraphicPanelBackgroundColor);
+</pre>
+
+<p>There is support in the <code>enum</code> for a left or right-positioned graphic panel, but I didn't really need it, so that's 
+where support for that positioning ends.  For the eternal tinkerers out there, it would require a completely new/additional method 
+just for painting such a panel, so have at it if you're so inclined.   All of this means that I need to put in a sanity check to make 
+sure the programmer didn't use any of the side-oriented positioning for this version of the library.  The breadth of the check 
+includes translating the selected position to its appropriate top-oriented equivalent.</p>
+
+<pre>    // Sanity check for the image position - since this panel is at the top of 
+    // the form, we automatically adjust the setting to it's closest equivalent 
+    // value.
+    switch (this.GraphicPanelImagePosition)
+    {
+        case WizardImagePosition.Top :
+            this.GraphicPanelImagePosition = WizardImagePosition.Right;
+            break;
+
+        case WizardImagePosition.Bottom :
+            this.GraphicPanelImagePosition = WizardImagePosition.Center;
+            break;
+
+        case WizardImagePosition.Middle :
+            this.GraphicPanelImagePosition = WizardImagePosition.Left;
+            break;
+    }
+</pre>
+
+<p>Next we load the image from the resources, and calculating the image position.</p>
+
+<pre>    try
+    {
+        // retrieve the image if necessary, resize it if necessary, and 
+        // position it in the panel
+        if (this.GraphicPanelImageResource != &quot;&quot;)
+        {
+            // since this code is in a DLL, and since the bitmap is located in the 
+            // exe's resources, we need to get the *entry* assembly in orer to load 
+            // the appropriate resource stream.
+            Assembly assembly = Assembly.GetEntryAssembly();
+
+            // if the GraphicPanelImageResource string is incorrect, an exception 
+            // will be thrown at the next line of code (saying the stream is null)
+            Stream stream = assembly.GetManifestResourceStream(this.GraphicPanelImageResource);
+
+            // create the bitmap from the stream
+            image = new Bitmap(Bitmap.FromStream(stream));
+
+            // establish the image rectangle size
+            imageRect.Size = new Size(image.Width, image.Height);
+
+            // if the image isn't at least as tall as the panel, we need to 
+            // resize it
+            if (imageRect.Size.Height != panelRect.Size.Height)
+            {
+                // find out how much shorter/taller it is than the panel
+                float resizePercent = (float)panelRect.Height / (float)imageRect.Height;
+
+                // and then adjust the width so that the aspect ratio remains intact
+                imageRect.Size = new Size((int)((float)imageRect.Width * resizePercent), 
+                                          panelRect.Height);
+
+                // Establish the position of the image within the container panel. 
+                // Since we earlier performed a sanity check to ensure a valid 
+                // position, we can assume that all is well at this point.
+                switch (this.GraphicPanelImagePosition)
+                {
+                    case WizardImagePosition.Right :
+                        imageRect.Location = new Point(panelRect.Width - imageRect.Width, 0);
+                        break;
+                    case WizardImagePosition.Left :
+                        imageRect.Location = new Point(0, 0);
+                        break;
+                    case WizardImagePosition.Center :
+                        imageRect.Location = new Point((int)(((float)panelRect.Width - 
+                                                       (float)imageRect.Width) * 0.5), 0);
+                        break;
+                }
+            }
+        } // if (this.GraphicPanelImageResource != &quot;&quot;)
+
+</pre>
+
+<p>Next, we calculate our gradient rectangle, and its position.  One point to notice is that we start out assuming the gradient 
+rectangle consumes the entire graphic panel.  Whether it does or not is based on whether or not the programmer has specified that 
+the image has a transparent background.  If it doesn't, the gradient rectangle only consumes the space not intended for use by the 
+image.</p>
+
+<pre>        // The direction of the gradient is determined by the location of the image. 
+        // If the image is in the center, two gradients are painted - one from each 
+        // outside edge of the panel.
+
+        // Assume the image is at one side or the other (as opposed to the center).
+        bool needOppositeGradient = false;
+        if (needGradient)
+        {
+            switch (this.GraphicPanelImagePosition)
+            {
+                case WizardImagePosition.Left :
+                    if (!m_graphicPanelImageIsTransparent)
+                    {
+                        gradientRect.Location = new Point(imageRect.Width-1, 0);
+                        gradientRect.Size = new Size(gradientRect.Width - imageRect.Width, 
+                                                     gradientRect.Height);
+                        gradientDirection = 180;
+                    }
+                    break;
+
+                case WizardImagePosition.Right :
+                    if (!m_graphicPanelImageIsTransparent)
+                    {
+                        gradientRect.Location = new Point(0, 0);
+                        gradientRect.Size = new Size(gradientRect.Width - imageRect.Width, 
+                                                     gradientRect.Height);
+                        gradientDirection = 0;
+                    }
+                    break;
+
+                case WizardImagePosition.Center :
+                    {
+                        needOppositeGradient = true;
+                        gradientRect.Location = new Point(0, 0);
+                        gradientRect.Size = new Size((int)(((float)gradientRect.Width - 
+                                                     (float)imageRect.Width) * 0.5), 
+                                                     gradientRect.Height);
+                        // initially create the brush for the left-right gradient
+                        gradientDirection = 0;
+                    }
+                    break;
+            }
+
+            // we can now create our gradient brush
+            gradientBrush = new LinearGradientBrush(gradientRect, 
+                                                    GraphicPanelGradientColor, 
+                                                    GraphicPanelBackgroundColor,
+                                                    gradientDirection);
+        }
+</pre>
+
+<p>Finally we can start painting. We start with the gradient rectangle, and then lay on the image.  This allows us to make a 1-pixel 
+mistake without overwriting the image. (Oh c'mon - we all make mistakes every now and then.)   We also need to be prepare to draw 
+the opposite gradient rectangle in the even the image is centered in the panel.</p>
+
+<pre>        // clear our panel with the background color
+        g.Clear(this.GraphicPanelBackgroundColor);
+
+        // if we're going to paint a gradient, paint it
+        if (needGradient &amp;&amp; gradientBrush != null)
+        {
+            g.FillRectangle(gradientBrush, gradientRect);
+            if (needOppositeGradient)
+            {
+                // clean up the brush
+                gradientBrush.Dispose();
+                // reverse the direction of the gradient
+                gradientDirection = (gradientDirection == 180) ? 0 : 180;
+                // move the rectangle to the right side of the bitmap
+                gradientRect.Location = new Point(gradientRect.Width + 
+                                                  imageRect.Width, 0);
+                // create a new gradient brush for the right side 
+                gradientBrush = new LinearGradientBrush(gradientRect, 
+                                                        GraphicPanelGradientColor, 
+                                                        GraphicPanelBackgroundColor,
+                                                        gradientDirection);
+                // paint!
+                g.FillRectangle(gradientBrush, gradientRect);
+            }
+            // and clean up the brush
+            gradientBrush.Dispose();
+        }
+
+        // if we have an image to display, paint it
+        if (image != null)
+        {
+            g.DrawImage(image, imageRect);
+            // and don't forget to clean up our image resource
+            image.Dispose();
+        }
+
+    }
+    catch (Exception ex)
+    {
+        throw ex;
+    }
+}
+</pre>
+
+<p>That was a HUGE method.  You may be wondering why we didn't paint the title/subtitle in that method. Well, that's because only the 
+wizard pages know when the title/subtitle need to be changed, and when a new page is activated, they call the following method in 
+order to facilitate this.</p>
+
+<pre>protected void PaintTitle(string title, string subtitle)
+{
+    // Set our text, color and initial location - if the image is placed in 
+    // the center, we don't draw the title/subtitle.
+    if (this.GraphicPanelImagePosition == WizardImagePosition.Center)
+    {
+        this.labelTitle.Visible = false;
+        this.labelSubtitle.Visible = false;
+        return;
+    }
+    else
+    {
+        this.labelTitle.Visible = true;
+        this.labelSubtitle.Visible = true;
+    }
+
+    // configure the title label
+    this.labelTitle.AutoSize	= true;
+    this.labelTitle.Text	= m_pageChain.CurrentPage.Title;
+    this.labelTitle.Font	= m_graphicPanelTitleFont;
+    this.labelTitle.ForeColor	= m_graphicPanelTitleColor;
+
+    // configure the subtitle label
+    this.labelSubtitle.AutoSize	= true;
+    this.labelSubtitle.Text	= m_pageChain.CurrentPage.Subtitle;
+    this.labelSubtitle.Font	= m_graphicPanelSubtitleFont;
+    this.labelSubtitle.ForeColor= m_graphicPanelSubtitleColor;
+
+    // if the image is on the left, we have to also move the title and 
+    // subtitle to the other side of the form.
+    if (this.GraphicPanelImagePosition == WizardImagePosition.Left)
+    {
+        this.labelTitle.Location = new Point(this.graphicPanelTop.Width - 10 - 
+                                             this.labelTitle.Size.Width, 
+                                             this.labelTitle.Location.Y);
+        this.labelSubtitle.Location = new Point(this.graphicPanelTop.Width - 10 - 
+                                                this.labelSubtitle.Size.Width, 
+                                                this.labelSubtitle.Location.Y);
+    }
+
+    // we need the panel rect so we can correctly position the text in 
+    // the center of the panel
+    Rectangle panelRect = new Rectangle(0, 0, 
+                                        this.graphicPanelTop.Width, 
+                                        this.graphicPanelTop.Height);
+
+    try
+    {
+        using (Graphics g = Graphics.FromHwndInternal(this.Handle))
+        {
+            // combine the heights so we can determine first y-position.
+            int textHeight = (this.labelTitle.Height + this.labelSubtitle.Height);
+            int y = (int)(((float)panelRect.Height - (float)textHeight) * 0.5f);
+            // position the title
+            this.labelTitle.Location = new Point(this.labelTitle.Location.X, y);
+            // calculate the y-position of the subtitle
+            y += this.labelTitle.Size.Height; 
+            // and then position it
+            this.labelSubtitle.Location = new Point(this.labelSubtitle.Location.X, 
+                                                    this.labelSubtitle.Location.Y);
+            // make them paint
+            this.labelTitle.Invalidate();
+            this.labelSubtitle.Invalidate();
+        }
+    }
+    catch (Exception ex)
+    {
+        throw ex;
+    }
+}
+</pre>
+
+<p>When a wizard page is created, it calls the <code>PageCreated</code> method.  This method takes care of adding the page (remember, 
+it's a <code>UserControl</code>) to the <code>pagePanel</code>'s child controls list.  While we're here, it also sets the hide/show 
+state of all the buttons. This is a form-global setting, but it can be modfieid with the wizard pages if needed.  The way I have it 
+figured, when a button is physically hidden from view, it's probably going to be hidden for the life of the form.  Finally, the 
+method performs some sanity checks on the page that was created to make sure it's not appearing in the wrong order, and then saves 
+the page as a start page or stop page, if applicable.</p>
+
+<pre>public void PageCreated(WizardPage page)
+{
+    m_pageCount++;
+    pagePanel.Controls.Add(page);
+
+    // hide the appropriate buttons (this should be specified wherever you 
+    // instantiate your wizard object)
+    if (ButtonBackHide)
+    {
+        page.ButtonStateBack &amp;= ~WizardButtonState.Visible;
+    }
+    if (ButtonNextHide)
+    {
+        page.ButtonStateNext &amp;= ~WizardButtonState.Visible;
+    }
+    if (ButtonCancelHide)
+    {
+        page.ButtonStateCancel &amp;= ~WizardButtonState.Visible;
+    }
+    if (ButtonHelpHide)
+    {
+        page.ButtonStateHelp &amp;= ~WizardButtonState.Visible;
+    }
+
+    // I realize some of the exceptions seem redundant, but it helps to better 
+    // diagnose a programming error.
+    switch (page.WizardPageType)
+    {
+        case WizardPageType.Start :
+            {
+                if (m_startPage != null)
+                {
+                    throw new Exception(&quot;A start page has already been specified.&quot;);
+                }
+                if (m_stopPage != null)
+                {
+                    throw new Exception(&quot;A start page cannot be specified after a stop page has been specified.&quot;);
+                }
+                if (this.PageCount &gt; 0)
+                {
+                    throw new Exception(&quot;A start page cannot be specified after other pages have been specified.&quot;);
+                }
+                m_startPage = page;
+            }
+            break;
+
+        case WizardPageType.Stop :
+            {
+                if (m_stopPage != null)
+                {
+                    throw new Exception(&quot;A stop page has already been specified.&quot;);
+                }
+                if (m_startPage == null)
+                {
+                    throw new Exception(&quot;A stop page cannot be specified until a start page has been specified.&quot;);
+                }
+                m_stopPage = page;
+            }
+            break;
+
+        case WizardPageType.Intermediate :
+            {
+                if (m_startPage == null)
+                {
+                    throw new Exception(&quot;Intermediate pages cannot be specified until a start page has been specified.&quot;);
+                }
+                if (m_stopPage != null)
+                {
+                    throw new Exception(&quot;Intermediate pages cannot be specified after a stop page has been specified.&quot;);
+                }
+            }
+            break;
+    }
+}
+</pre>
+
+<p>Another method that's called during wizard page creation is <code>DiscoverPagePanelSize</code>.  This method is responsible for 
+tracking the largest necessary page size so that we can make the form large enough to display each page in its entirety.</p>
+<pre>public void DiscoverPagePanelSize(Size pageSize)
+{
+    if (pageSize.Width &gt; m_desiredPagePanelSize.Width)
+    {
+        m_desiredPagePanelSize.Width = pageSize.Width;
+    }
+    if (pageSize.Height &gt; m_desiredPagePanelSize.Height)
+    {
+        m_desiredPagePanelSize.Height = pageSize.Height;
+    }
+}
+</pre>
+
+<p>Finally, we get to the method that kicks everything off. After you've created your pages and configured the wizard form itself, 
+you simply call <code>StartWizard</code>.  This method performs some sanity checks to make sure we a) have wizard pages, b) at least 
+one start page, and c) at least one stop page.</p>
+
+<pre>public void StartWizard()
+{
+    if (m_pageCount == 0)
+    {
+        throw new Exception(&quot;There are no pages in the wizard.&quot;);
+    }
+    if (m_startPage == null)
+    {
+        throw new Exception(&quot;A start page has not been added to the wizard.&quot;);
+    }
+    if (m_stopPage == null)
+    {
+        throw new Exception(&quot;A stop page has not been added to the wizard.&quot;);
+    }
+
+    this.Width += (m_desiredPagePanelSize.Width  - this.pagePanel.Size.Width);
+    this.Height += (m_desiredPagePanelSize.Height - this.pagePanel.Size.Height);
+
+    // seed the chain
+    m_pageChain.GoNext(m_startPage);
+    UpdateButtonsState(m_startPage);
+}
+</pre>
+
+<p>When the wizard is started, or a new page is activated, we have to update the graphic panel, the visibility and enabled state of 
+the buttons on the wizard form, and the text on the Next button. The following method handles those chores. The button state is 
+maintained as flags so that a single variable can be used to maintain the button's state.</p>
+
+<pre>public void UpdateWizardForm(WizardPage page)
+{
+    PaintTitle(page.Title, page.Subtitle);
+
+    // take care of changing the buttons to their appropriate state for the activated page
+    this.buttonBack.Visible   = (page.ButtonStateBack &amp; WizardButtonState.Visible) 
+                                 == WizardButtonState.Visible;
+    this.buttonBack.Enabled   = (page.ButtonStateBack &amp; WizardButtonState.Enabled) 
+                                 == WizardButtonState.Enabled;
+    this.buttonNext.Visible   = (page.ButtonStateNext &amp; WizardButtonState.Visible) 
+                                 == WizardButtonState.Visible;
+    this.buttonNext.Enabled   = (page.ButtonStateNext &amp; WizardButtonState.Enabled) 
+                                 == WizardButtonState.Enabled;
+    this.buttonCancel.Visible = (page.ButtonStateCancel &amp; WizardButtonState.Visible) 
+                                 == WizardButtonState.Visible;
+    this.buttonCancel.Enabled = (page.ButtonStateCancel &amp; WizardButtonState.Enabled) 
+                                 == WizardButtonState.Enabled;
+    this.buttonHelp.Visible   = (page.ButtonStateHelp &amp; WizardButtonState.Visible) 
+                                 == WizardButtonState.Visible;
+    this.buttonHelp.Enabled   = (page.ButtonStateHelp &amp; WizardButtonState.Enabled) 
+                                 == WizardButtonState.Enabled;
+    // see if we need to change the text of the Next button
+    if (page.WizardPageType == WizardPageType.Stop)
+    {
+        this.buttonNext.Text = &quot;Finish&quot;;
+    }
+    else
+    {
+        this.buttonNext.Text = &quot;Next &gt;&quot;;
+    }
+}
+</pre>
+
+<p>When you get right down to it, the <code>WizardFormBase</code> class is comprised mostly of drawing code to support the graphic 
+panel container, yet it hides a lot of the mechanics of wizard forms from the programmer.  I'm not saying that the class allows you 
+to create a wizard in less than three lines of code, but it's reasonably low-impact enough to help keep your mind on the derived 
+wizard pages themselves.  Speaking of the wizard pages, that's where we're going next.</p>
+
+<h3>WizardPage -  The Base Page Class</h3>
+
+<p>First, there are three constructor overloads. The first one is the default constructor, and was retained to support the designer 
+in our derived forms - it's not really intended to be used for real pages.  The other two overloads provide support for specifying 
+the parent wizard form, and the page type.  Both of the &quot;real&quot; constructor overloads call the <code>Init</code> method. 
+This method is responsible for some minor configuration (docking style, initial visibility, and page type), notifying the parent form 
+of its existence, and adding a message handler for the <code>WizardPageChangedEvent</code> event.</p>
+
+<pre>private void Init(WizardFormBase parent, WizardPageType pageType)
+{
+    InitializeComponent();
+
+    m_parentWizardForm = parent;
+    this.Visible       = false;
+    this.Dock          = DockStyle.Fill;
+    m_pageType         = pageType;
+    // if this is the start page, disable the Back button
+    if (WizardPageType == WizardPageType.Start)
+    {
+        ButtonStateBack &amp;= ~WizardButtonState.Enabled;
+    }
+    m_parentWizardForm.PageCreated(this);
+    m_parentWizardForm.WizardPageChangeEvent += new WizardPageChangeHandler(parentForm_WizardPageChange);
+}
+</pre>
+
+<p>The remaining methods are fairly minor as far as functionality goes.  they're included with their associate comments so we can 
+same time and a little space.</p>
+
+<pre>//--------------------------------------------------------------------------------
+/// &lt;summary&gt;
+/// Adds a &quot;next page&quot; item to the list of possible next pages. The derived 
+/// Wizard page can then decide on its own which page is next based on the 
+/// values of one/more controls in the derived page.
+/// &lt;/summary&gt;
+/// &lt;param name=&quot;nextPage&quot;&gt;The page to add as a possible &quot;next&quot; page&lt;/param&gt;
+public void AddNextPage(WizardPage nextPage)
+{
+    m_nextPages.Add(nextPage);
+}
+
+//--------------------------------------------------------------------------------
+/// &lt;summary&gt;
+/// Allows the derived Wizard form to raise the WizardPageActivated event.
+/// &lt;/summary&gt;
+/// &lt;param name=&quot;e&quot;&gt;&lt;/param&gt;
+protected void Raise_WizardPageActivated(WizardPageActivateArgs e)
+{
+    WizardPageActivated(this, e);
+}
+
+//--------------------------------------------------------------------------------
+/// &lt;summary&gt;
+/// Base method used to save data for all visited wizard pages. This copy of 
+/// the method always returns true.
+/// &lt;/summary&gt;
+/// &lt;returns&gt;True if the data was succesfully saved&lt;/returns&gt;
+public virtual bool SaveData()
+{
+    return true;
+}
+
+//--------------------------------------------------------------------------------
+/// &lt;summary&gt;
+/// Get the next page to be shown. This is virtual so that you can override it 
+/// in order to provide a programmatically determined &quot;next&quot; page.
+/// &lt;/summary&gt;
+/// &lt;returns&gt;The page that will be displayed next&lt;/returns&gt;
+public virtual WizardPage GetNextPage()
+{
+    // sanity check to make sure we have a page to return
+    if (m_nextPages.Count == 0)
+    {
+        throw new Exception(&quot;No pages have been specified as a \&quot;next\&quot; page.&quot;);
+    }
+    // return the first page in the list of &quot;next&quot; pages
+    return m_nextPages[0];
+}
+
+//--------------------------------------------------------------------------------
+/// &lt;summary&gt;
+/// Allows the base class to handle a page change event. Right now, there's 
+/// nothing to do, but you could add some apppropriate functionalty that 
+/// suits your application.
+/// &lt;/summary&gt;
+/// &lt;param name=&quot;sender&quot;&gt;&lt;/param&gt;
+/// &lt;param name=&quot;e&quot;&gt;&lt;/param&gt;
+void parentForm_WizardPageChange(object sender, WizardPageChangeArgs e)
+{
+}
+
+//--------------------------------------------------------------------------------
+/// &lt;summary&gt;
+/// Fired when a page is made visible.
+/// &lt;/summary&gt;
+/// &lt;param name=&quot;sender&quot;&gt;&lt;/param&gt;
+/// &lt;param name=&quot;e&quot;&gt;&lt;/param&gt;
+private void WizardPage_VisibleChanged(object sender, EventArgs e)
+{
+    // The designer will crash the IDE if this code is executed *in the designer.  
+    // To avoid this pain in the *ass* issue, we have to check to see if the 
+    // designer is active before executing the code, and no - there is no built-in 
+    // method in the UseControl class to provide this status, so I wrote a small 
+    // function that can be called from within this class whenever necessary. The 
+    // only problem is that ANY derived control (or form) may need this method.
+    if (!WizardUtility.IsDesignTime())
+    {
+        if (this.Visible)
+        {
+            WizardPageActivated(this, new WizardPageActivateArgs(this, m_stepType));
+        }
+    }
+}
+</pre>
+
+<h2>The Sample Application</h2>
+
+<p>The sample application is a simple affair that initially presents a form with a single button.  Clicking that button will display 
+the wizard form (the reason we're all here).</p>
+
+
+<h3>The WizardExample Form</h3>
+
+<p>Before beginning, make sure you've added the <code>WizardFormLib</code> project to your solution, and compiled the solution (don't 
+forget to add a reference to the assembly in your application project).  This will &quot;prime the pump&quot; as it were, and the IDE 
+will be able to help us out a little.</p>
+
+<p>To create a wizard form, you need to add a new item to the app. In the templates dialog, you want to select Inherited Form, as 
+shown below:</p>
+
+<img height="414" width="626" src="WizardForm/AddNewItemForm.png" alt="AddNewItemForm.png" />
+
+<p>After you click okay, you'll be prompted to select a base class. The <code>WizardFormBase</code> should be one of your selections. 
+ Select it, and click OK.  At this point, the IDE will show you the new form. Just go ahead and close that window, and view the code 
+for the new form class.  Go ahead and add <code>using WizardFormLib;</code>, and change the base class to 
+
+<code>WizardFormBase</code>.</p>
+
+<p>Now, create some <code>WizardPage</code>-derived objects.  This process is similar to creatingthe wizard form - add a new item to 
+the application project, and select &quot;Inherited UserControl&quot; from the available templates.  Don't worry about populating the 
+pages with controls just yet because you need to add some code that will make the pages work.  For each one, you need to add some 
+overloaded constructors and an <code>Init</code> function, like so:</p>
+
+<pre>//--------------------------------------------------------------------------------
+public WizardPage1(WizardFormBase parent) : base(parent)
+{
+    InitPage();
+}
+
+//--------------------------------------------------------------------------------
+public WizardPage1(WizardFormBase parent, WizardPageType pageType) : base(parent, pageType)
+{
+    InitPage();
+}
+
+//--------------------------------------------------------------------------------
+public void InitPage()
+{
+    ButtonStateNext &amp;= ~WizardButtonState.Enabled;
+    InitializeComponent();
+    base.Size = this.Size;
+    this.ParentWizardForm.DiscoverPagePanelSize(this.Size);
+    this.ParentWizardForm.EnableNextButton(false);
+}
+</pre>
+
+<p>In our eaxmple app, the first page allows the user to take a different path through the wizard depending on which radio button is 
+clicked.  If you need the same functionality, you need to override the following function in your derived class:</p>
+
+<pre>public override WizardPage GetNextPage()
+{
+    // some volutary sanity checking
+    if (m_nextPages.Count != 2)
+    {
+        throw new Exception(&quot;Page 1 expects two \&quot;next\&quot; pages to be specified.&quot;);
+    }
+    // make a choice
+    if (this.radioButton1.Checked)
+    {
+        return m_nextPages[0];
+    }
+    else
+    {
+        return m_nextPages[1];
+    }
+}
+</pre>
+
+<p>After you've created all of your wizard pages, go ahead and populate the pages with controls.  (The pages in the sample app are 
+understandably useless, having the primary purpose of simply providing pages that are of different size.)   After you've populated 
+your pages, return to your wizard form code so you can instantiate the pages and start the wizard.  Go ahead and add an event handler 
+for the Load event, and make it look something like this:</p>
+
+<pre>private void WizardExample_Load(object sender, EventArgs e)
+{
+    // configure the wizard form itself
+    this.GraphicPanelImagePosition = WizardImagePosition.Left;
+    this.GraphicPanelImageResource = &quot;WizardDemo.udplogo.png&quot;;
+    this.GraphicPanelGradientColor = Color.DarkSlateBlue;
+
+    // add handlers for the buttons
+    this.buttonBack.Click	+= new System.EventHandler(this.buttonBack_Click);
+    this.buttonNext.Click	+= new System.EventHandler(this.buttonNext_Click);
+    this.buttonCancel.Click	+= new System.EventHandler(this.buttonCancel_Click);
+    this.buttonHelp.Click	+= new System.EventHandler(this.buttonHelp_Click);
+
+    // create the wizard pages we need
+    page1	= new WizardPage1(this, WizardPageType.Start);
+    page2a	= new WizardPage2a(this);
+    page2b	= new WizardPage2b(this);
+    page3	= new WizardPage3(this);
+    page4	= new WizardPage4(this, WizardPageType.Stop);
+
+    // add a handler that lets us know when a page has been activated (notice that
+    // in our sample app, all of the handlers point to the same function - you may 
+    // need different functionality)
+    page1.WizardPageActivated	+= new WizardPageActivateHandler(WizardPageActivated);
+    page2a.WizardPageActivated	+= new WizardPageActivateHandler(WizardPageActivated);
+    page2b.WizardPageActivated	+= new WizardPageActivateHandler(WizardPageActivated);
+    page3.WizardPageActivated	+= new WizardPageActivateHandler(WizardPageActivated);
+    page4.WizardPageActivated	+= new WizardPageActivateHandler(WizardPageActivated);
+
+    // make sure all of the necessary pages have a &quot;next&quot; page so they know where 
+    // to steer the user when he clicks the Next button
+    page1.AddNextPage(page2a);
+    page1.AddNextPage(page2b);
+    page2a.AddNextPage(page3);
+    page2b.AddNextPage(page3);
+    page3.AddNextPage(page4);
+
+    // start the wizard
+    StartWizard();
+}
+</pre>
+
+<p>The last thing you have to do is to make the event handlers do something.  The sample application doesn't actually have anything 
+to do when WizardPageActivated event is raised (thanks Steven Nichiolas!), but I established a handler for future needs.</p>
+
+<pre>//--------------------------------------------------------------------------------
+/// &lt;summary&gt;
+/// Fired when a wizard page is activated (made visible)
+/// &lt;/summary&gt;
+/// &lt;param name=&quot;sender&quot;&gt;&lt;/param&gt;
+/// &lt;param name=&quot;e&quot;&gt;&lt;/param&gt;
+void WizardPageActivated(object sender, WizardPageActivateArgs e)
+{
+}
+
+//--------------------------------------------------------------------------------
+/// &lt;summary&gt;
+/// Fired when the back button is clicked
+/// &lt;/summary&gt;
+/// &lt;param name=&quot;sender&quot;&gt;&lt;/param&gt;
+/// &lt;param name=&quot;e&quot;&gt;&lt;/param&gt;
+private void buttonBack_Click(object sender, EventArgs e)
+{
+    // tell the page chain to go to the previous page
+    WizardPage currentPage = m_pageChain.GoBack();
+    // raise the page change event (this currently does nothing but lets the 
+    // base class know when the active page has changed
+    Raise_WizardPageChangeEvent(new WizardPageChangeArgs(currentPage, WizardStepType.Previous));
+}
+
+//--------------------------------------------------------------------------------
+/// &lt;summary&gt;
+/// Fired when the Next button is clicked
+/// &lt;/summary&gt;
+/// &lt;param name=&quot;sender&quot;&gt;&lt;/param&gt;
+/// &lt;param name=&quot;e&quot;&gt;&lt;/param&gt;
+private void buttonNext_Click(object sender, EventArgs e)
+{
+    // if the current page (before changing) is the last page in the wizard, 
+    // take steps to close the wizard
+    if (m_pageChain.CurrentPage.WizardPageType == WizardPageType.Stop)
+    {
+        // call the central SaveData method (which calls the SaveData 
+        // method in each page in the chain
+        if (m_pageChain.SaveData() == null)
+        {
+            // and if everything is okay, close the wizard form
+            this.Close();
+        }
+    }
+    // otherwise, move to the next page in the chain, and let the base class know
+    else
+    {
+        WizardPage currentPage = m_pageChain.GoNext(m_pageChain.CurrentPage.GetNextPage());
+        Raise_WizardPageChangeEvent(new WizardPageChangeArgs(currentPage, WizardStepType.Next));
+    }
+}
+
+//--------------------------------------------------------------------------------
+/// &lt;summary&gt;
+/// Fired when the user clicks the Cancel button
+/// &lt;/summary&gt;
+/// &lt;param name=&quot;sender&quot;&gt;&lt;/param&gt;
+/// &lt;param name=&quot;e&quot;&gt;&lt;/param&gt;
+private void buttonCancel_Click(object sender, EventArgs e)
+{
+    this.Close();
+}
+
+//--------------------------------------------------------------------------------
+/// &lt;summary&gt;
+/// Fired when the user clicks the Help button
+/// &lt;/summary&gt;
+/// &lt;param name=&quot;sender&quot;&gt;&lt;/param&gt;
+/// &lt;param name=&quot;e&quot;&gt;&lt;/param&gt;
+private void buttonHelp_Click(object sender, EventArgs e)
+{
+    MessageBox.Show(&quot;Not implemented yet.&quot;);
+}
+</pre>
+
+<h2>Niggles and Minutia</h2>
+
+<p>In the process of writing this code, I learned some valuable information about WinForms programming.</p>
+
+<h3>Designer Issues</h3>
+
+<p>When you are deriving from a <code>Form</code> or <code>UserControl</code> class, you have to be very careful about the code you 
+put in your base classes.  The reason is that it's very easy to freak the designer out.  In my case, I added an event handler for the 
+<code>VisibleChanging</code> event.</p>
+
+<p>Right after I added that event handler, attempting to load one of the derived wizard pages in the designer resulted in a 
+complete IDE crash.  It has something to do with the <code>this</code> pointer not being set to the instance of an object.  When I 
+ran the code as an application, it was fine, but trying to load it in the designer in the IDE resulted in tragedy.</p>
+
+<p>The solution is to determine whehther or not the code is running in the IDE, and if not, executing the offending code.  I found 
+several methods for accomplishing this, but the only thing that worked was the following code.  I created a utility class so I could 
+use the code in the future (if necessary).</p>
+
+<pre>using System.Diagnostics;
+
+//--------------------------------------------------------------------------------
+public static bool IsDesignTime()
+{
+    // finally - one that worked as desired. I see a potential problem, though, 
+    // if Micrsoft decides to change the IDEs ProcessName property. I can verify 
+    // that this will at least work in VS2005 and VS2008.
+    return (Process.GetCurrentProcess().ProcessName.ToLower() == &quot;devenv&quot;);
+}
+</pre>
+
+<h3>Inheritance Not</h3>
+
+<p>In order to make use of fairly generic functions without having to worry about types, I pass WizardPage objects around - a lot. It 
+simply makes life easier.  Generally speaking, this makes life easier on you, but in this case, the effect was exactly the opposite.  
+In my case, everything was fine until I decided I wanted the form to automatically resize itself based on the largest combine 
+dimensions of all of the wizard pages.</p>
+
+<p>When you inherit from a <code>Form</code> or <code>UserControl</code>, and you refuse to use the derived class type as a 
+reference, I've found that properties in the derived class do NOT overwrite the same properties in the base class.  You actually have 
+to transfer the desired properties to the base class so that things happen the way you expect (or, at least the way you'd expect in a 
+C++ application).  Of course, this discovery the direct of result of my apparently unnatural desire to pass around the base class 
+object, and raised it's ugly.  I discovered this was also a discovery that was made while trying to dynamically resize the form, and 
+if I was using the actual class type, this wouldn't have been a problem.</p>
+
+<h3>The Top Panel Bitmap (Section added on 12/15/2008)</h3>
+
+<p>The image used in the top graphic panel must be added as a resource, and must be set to be an EMBEDDED resource.  If you don't do 
+this, you'll get an exception and the top panel will contain nothing but a white background with a big red X painted through it.</p>
+
+<h3>Common Gotcha's (Section added on 12/15/2008)</h3>
+
+<p>If you fail to specify the correct assembly name when you initialize your wizard form, the library will not be able to locate your 
+image resource.</p>
+
+<pre>private void WizardExample_Load(object sender, EventArgs e)
+{
+    // configure the wizard form itself
+    this.GraphicPanelImagePosition = WizardImagePosition.Left;
+
+    /// THIS LINE MUST SPECIFY THE CORRECT ASSEMBLY
+    this.GraphicPanelImageResource = &quot;WizardDemo.udplogo.png&quot;;
+
+    this.GraphicPanelGradientColor = Color.DarkSlateBlue;
+</pre>
+
+<h2>Addendum (01/20/2009) - WizardFormStartedEvent Event</h2>
+
+<p>Some time after posting this article, I decided it might be nice if you could optionally center a given group of controls 
+on the wizard page.  I figured that the best way to apporoach this was to create a container control on the page, place your 
+controls inside that container, and then simply center the container.  Of course, "simply" never happens when you're on a 
+schedule.  Here's how I approached it.</p>
+
+<p>Knowing that the form is automatically made large enough to contain the largest page, I knew that I had to wait until after 
+all of the pages had been added, and then fire an event indicating that the form was ready to go.  Fortunately, we already have 
+the <code>StartWizard()</code> method, which is called immediately after addng the pages.  All I had to do was create a suitable 
+(empty) EventArgs class, and an event.</p>
+
+<p>In EventArgs.cs:</p>
+
+<pre>public delegate void WizardFormStartedHandler(object sender, WizardFormStartedArgs e);
+
+public class WizardFormStartedArgs : EventArgs
+{
+    public WizardFormStartedArgs()
+    {
+    }
+}
+</pre>
+
+<p>In WizardFormBase.cs</p>
+
+<pre>
+namespace WizardFormLib
+{
+    public partial class WizardFormBase : Form
+    {
+        public event WizardFormStartedHandler WizardFormStartedEvent;
+
+        public void Raise_WizardFormStartedEvent(WizardFormStartedArgs e)
+        {
+            WizardFormStartedEvent(this, e);
+        }
+
+        public void StartWizard()
+        {
+            //... code
+
+            // broadcast the "wizard started" event
+            Raise_WizardFormStartedEvent(new WizardFormStartedArgs());
+        }
+
+    }
+}
+</pre>
+
+<p>Finally, in any wizard page that you wish to handle the event in, simply add a handler for it. I added a <code>WizardPage5</code> 
+object to the demo, and put a handler in it:</p>
+
+<pre>public partial class WizardPage5 : WizardFormLib.WizardPage
+{
+
+    public void InitPage()
+    {
+        InitializeComponent();
+        base.Size = this.Size;
+        this.ParentWizardForm.DiscoverPagePanelSize(this.Size);
+
+        // add a handler to let us know when the wizard form has been "started"
+        this.ParentWizardForm.WizardFormStartedEvent += 
+              new WizardFormStartedHandler(ParentWizardForm_WizardFormStartedEvent);
+    }
+
+    void ParentWizardForm_WizardFormStartedEvent(object sender, WizardFormStartedArgs e)
+    {
+        // center the groupbox container in the page. This should always work 
+        // because the form is large enough to accomodate this wizard page.
+
+        // get the size of the page panel
+        Size parentPanel = this.ParentWizardForm.PagePanelSize;
+
+        // calculate our x/y centers
+        int x = (int)((parentPanel.Width - this.groupBox1.Width) * 0.5);
+        int y = (int)((parentPanel.Height - this.groupBox1.Height) * 0.5);
+
+        // move the container to its new location
+        this.groupBox1.Location = new Point(x, y);
+    }
+
+}
+</pre>
+
+<p>When the wizard page was designed it looked like this:</p>
+
+<img src="WizardForm/page5_designer.png" alt="page5_designer.png" />
+
+<p>When the page is displayed, it looks like this:</p>
+
+<img src="WizardForm/centeredpage.png" alt="centeredpage.png" />
+
+<p>If you're going to center controls on a wizard page (like I've done above), they must be enclosed by some kind of container 
+control (a <code>Panel</code>, <code>GroupBox</code>, etc), and you must remember to set the <code>Dock</code> property to <b>None</b> 
+for that container.</p>
+
+<p>As a side note, some of you might be wondering how I can be sure that the centering code will always work. Don't forget - the form is 
+resized to accomodate the largest wizard page that you add to it.  Therefore, the centering code I've demonstrated above will always 
+work.</p>
+
+<h2>In Closing</h2>
+
+<p>Like I said, this may not be the most innovative piece of work, but the point is that it *does* work.  If you spot something that 
+looks sideways, let me know and if I deem it within the context of the article, I'll update it at my earliest convenience.</p>
+
+<p>Cautionary Note: It is virtually impossible to write an article for CodeProject when <em>Top Gear</em> is on the television. :)
+
+</p>
+
+
+
+<p>
+</p><h2>History</h2>
+<ul><li><strong>01/21/2009:</strong> Added functionality to allow the programmer to center a container control within the wizard page. See article addendum for more info.</li></ul>
+<ul><li><strong>01/17/2009:</strong> Implemented bug fix described by Liesbet. Many thanks!</li></ul>
+<ul><li><strong>12/18/2008:</strong> Implemented recommendation by Steven Nicholas regarding setting the state of the wizard form buttons (I did it a little different than he described, but the general idea is the same).  Thanks Steven!.</li></ul>
+<ul><li><strong>12/15/2008:</strong> Fixed a couple of spelling errors and descriptive text errors.</li></ul>
+<ul><li><strong>12/14/2008:</strong> Original article posted.</li></ul>
+

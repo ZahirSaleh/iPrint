@@ -1,0 +1,274 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{416330FB-D1E1-4703-99CC-4D74A6BD8541}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>iPrint</RootNamespace>
+    <AssemblyName>iPrint</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <PlatformTarget>x64</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <PlatformTarget>x86</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Interop.WIA, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <HintPath>..\..\..\Interop.WIA.dll\Interop.WIA.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="MySql.Data, Version=6.9.5.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
+    <Reference Include="PesaPal.APIHelper.4.0">
+      <HintPath>..\PesaPal.APIHelper.4.0.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="VoIPSDK, Version=11.1.1.163, Culture=neutral, PublicKeyToken=4812fb35129b8487, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\VoIPSDK.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="clsGlobalFunctions.cs" />
+    <Compile Include="clsGlobalVariables.cs" />
+    <Compile Include="ImageResize.cs" />
+    <Compile Include="WizardPageUSBBrowser.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="WizardPageUSBBrowser.Designer.cs">
+      <DependentUpon>WizardPageUSBBrowser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Enums.cs" />
+    <Compile Include="EventArgs.cs" />
+    <Compile Include="jpgCompress.cs" />
+    <Compile Include="MySQLConnection.cs" />
+    <Compile Include="PesaPal.cs" />
+    <Compile Include="TilePicture.cs" />
+    <Compile Include="UserRect.cs" />
+    <Compile Include="WizardExceptions.cs" />
+    <Compile Include="WizardFormBase.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WizardFormBase.Designer.cs">
+      <DependentUpon>WizardFormBase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WizardPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="WizardPage.Designer.cs">
+      <DependentUpon>WizardPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WizardPageChain.cs" />
+    <Compile Include="WizardPageScanner.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="WizardPageScanner.Designer.cs">
+      <DependentUpon>WizardPageScanner.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormMain.Designer.cs">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WizardUtility.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <EmbeddedResource Include="WizardPageUSBBrowser.resx">
+      <DependentUpon>WizardPageUSBBrowser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WizardFormBase.resx">
+      <DependentUpon>WizardFormBase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WizardPage.resx">
+      <DependentUpon>WizardPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WizardPageScanner.resx">
+      <DependentUpon>WizardPageScanner.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormMain.resx">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WizardPagesLoader.resx">
+      <DependentUpon>WizardPagesLoader.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WizardPageSourceSelector.resx">
+      <DependentUpon>WizardPageSourceSelector.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WizardPageUSB.resx">
+      <DependentUpon>WizardPageUSB.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WizardPageCamera.resx">
+      <DependentUpon>WizardPageCamera.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WizardPageEditor.resx">
+      <DependentUpon>WizardPageEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WizardPagePrintSummary.resx">
+      <DependentUpon>WizardPagePrintSummary.cs</DependentUpon>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="WizardPagesLoader.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WizardPagesLoader.Designer.cs">
+      <DependentUpon>WizardPagesLoader.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WizardPageSourceSelector.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="WizardPageSourceSelector.Designer.cs">
+      <DependentUpon>WizardPageSourceSelector.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WizardPageUSB.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="WizardPageUSB.Designer.cs">
+      <DependentUpon>WizardPageUSB.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WizardPageCamera.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="WizardPageCamera.Designer.cs">
+      <DependentUpon>WizardPageCamera.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WizardPageEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="WizardPageEditor.Designer.cs">
+      <DependentUpon>WizardPageEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WizardPagePrintSummary.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="WizardPagePrintSummary.Designer.cs">
+      <DependentUpon>WizardPagePrintSummary.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WizardPagePayment.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="WizardPagePayment.Designer.cs">
+      <DependentUpon>WizardPagePayment.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="iprint.png" />
+    <EmbeddedResource Include="WizardPagePayment.resx">
+      <DependentUpon>WizardPagePayment.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
