@@ -42,18 +42,19 @@ namespace iPrint
 		{
             this.panelMain = new System.Windows.Forms.Panel();
             this.panelMainPic = new System.Windows.Forms.Panel();
-            this.btnCrop = new System.Windows.Forms.Button();
             this.PicBoxEdit = new System.Windows.Forms.PictureBox();
             this.panelEdit = new System.Windows.Forms.Panel();
             this.TabControl1 = new System.Windows.Forms.TabControl();
             this.TabPage1 = new System.Windows.Forms.TabPage();
+            this.label3 = new System.Windows.Forms.Label();
+            this.butCancelCrop = new System.Windows.Forms.Button();
+            this.butApplyCrop = new System.Windows.Forms.Button();
+            this.tBarResize = new System.Windows.Forms.TrackBar();
+            this.btnCrop = new System.Windows.Forms.Button();
             this.Label7 = new System.Windows.Forms.Label();
             this.lbloriginalSize = new System.Windows.Forms.Label();
             this.lblModifiedSize = new System.Windows.Forms.Label();
             this.Label4 = new System.Windows.Forms.Label();
-            this.btnOk = new System.Windows.Forms.Button();
-            this.Label3 = new System.Windows.Forms.Label();
-            this.DomainUpDown1 = new System.Windows.Forms.DomainUpDown();
             this.Label2 = new System.Windows.Forms.Label();
             this.Label1 = new System.Windows.Forms.Label();
             this.TabPage2 = new System.Windows.Forms.TabPage();
@@ -104,6 +105,7 @@ namespace iPrint
             this.panelEdit.SuspendLayout();
             this.TabControl1.SuspendLayout();
             this.TabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tBarResize)).BeginInit();
             this.TabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TrackBarBrightness)).BeginInit();
             this.TabPage4.SuspendLayout();
@@ -125,37 +127,27 @@ namespace iPrint
             this.panelMain.Controls.Add(this.panelFilmStripMain);
             this.panelMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelMain.Location = new System.Drawing.Point(0, 0);
+            this.panelMain.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panelMain.Name = "panelMain";
-            this.panelMain.Size = new System.Drawing.Size(1871, 871);
+            this.panelMain.Size = new System.Drawing.Size(1663, 697);
             this.panelMain.TabIndex = 11;
             // 
             // panelMainPic
             // 
-            this.panelMainPic.Controls.Add(this.btnCrop);
             this.panelMainPic.Controls.Add(this.PicBoxEdit);
             this.panelMainPic.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelMainPic.Location = new System.Drawing.Point(0, 0);
+            this.panelMainPic.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panelMainPic.Name = "panelMainPic";
-            this.panelMainPic.Size = new System.Drawing.Size(1228, 699);
+            this.panelMainPic.Size = new System.Drawing.Size(1091, 559);
             this.panelMainPic.TabIndex = 13;
-            // 
-            // btnCrop
-            // 
-            this.btnCrop.Location = new System.Drawing.Point(1135, 12);
-            this.btnCrop.Name = "btnCrop";
-            this.btnCrop.Size = new System.Drawing.Size(87, 79);
-            this.btnCrop.TabIndex = 4;
-            this.btnCrop.Tag = "8";
-            this.btnCrop.Text = "Crop";
-            this.btnCrop.UseVisualStyleBackColor = true;
-            this.btnCrop.Click += new System.EventHandler(this.btnCrop_Click);
             // 
             // PicBoxEdit
             // 
-            this.PicBoxEdit.Location = new System.Drawing.Point(2, 3);
-            this.PicBoxEdit.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.PicBoxEdit.Location = new System.Drawing.Point(2, 2);
+            this.PicBoxEdit.Margin = new System.Windows.Forms.Padding(4);
             this.PicBoxEdit.Name = "PicBoxEdit";
-            this.PicBoxEdit.Size = new System.Drawing.Size(1228, 696);
+            this.PicBoxEdit.Size = new System.Drawing.Size(1092, 557);
             this.PicBoxEdit.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.PicBoxEdit.TabIndex = 2;
             this.PicBoxEdit.TabStop = false;
@@ -169,9 +161,10 @@ namespace iPrint
             this.panelEdit.Controls.Add(this.TabControl1);
             this.panelEdit.Controls.Add(this.panel1);
             this.panelEdit.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panelEdit.Location = new System.Drawing.Point(1228, 0);
+            this.panelEdit.Location = new System.Drawing.Point(1091, 0);
+            this.panelEdit.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panelEdit.Name = "panelEdit";
-            this.panelEdit.Size = new System.Drawing.Size(643, 699);
+            this.panelEdit.Size = new System.Drawing.Size(572, 559);
             this.panelEdit.TabIndex = 12;
             // 
             // TabControl1
@@ -185,41 +178,101 @@ namespace iPrint
             this.TabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TabControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TabControl1.Location = new System.Drawing.Point(0, 0);
-            this.TabControl1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.TabControl1.Margin = new System.Windows.Forms.Padding(4);
             this.TabControl1.Name = "TabControl1";
             this.TabControl1.SelectedIndex = 0;
-            this.TabControl1.Size = new System.Drawing.Size(643, 610);
+            this.TabControl1.Size = new System.Drawing.Size(572, 487);
             this.TabControl1.TabIndex = 4;
             this.TabControl1.SelectedIndexChanged += new System.EventHandler(this.TabControl1_SelectedIndexChanged);
             // 
             // TabPage1
             // 
+            this.TabPage1.Controls.Add(this.label3);
+            this.TabPage1.Controls.Add(this.butCancelCrop);
+            this.TabPage1.Controls.Add(this.butApplyCrop);
+            this.TabPage1.Controls.Add(this.tBarResize);
+            this.TabPage1.Controls.Add(this.btnCrop);
             this.TabPage1.Controls.Add(this.Label7);
             this.TabPage1.Controls.Add(this.lbloriginalSize);
             this.TabPage1.Controls.Add(this.lblModifiedSize);
             this.TabPage1.Controls.Add(this.Label4);
-            this.TabPage1.Controls.Add(this.btnOk);
-            this.TabPage1.Controls.Add(this.Label3);
-            this.TabPage1.Controls.Add(this.DomainUpDown1);
             this.TabPage1.Controls.Add(this.Label2);
             this.TabPage1.Controls.Add(this.Label1);
-            this.TabPage1.Location = new System.Drawing.Point(4, 34);
-            this.TabPage1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.TabPage1.Location = new System.Drawing.Point(4, 29);
+            this.TabPage1.Margin = new System.Windows.Forms.Padding(4);
             this.TabPage1.Name = "TabPage1";
-            this.TabPage1.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.TabPage1.Size = new System.Drawing.Size(635, 572);
+            this.TabPage1.Padding = new System.Windows.Forms.Padding(4);
+            this.TabPage1.Size = new System.Drawing.Size(564, 454);
             this.TabPage1.TabIndex = 0;
-            this.TabPage1.Text = "Resize";
+            this.TabPage1.Text = "Resize/Crop";
             this.TabPage1.UseVisualStyleBackColor = true;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(16, 317);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(107, 17);
+            this.label3.TabIndex = 12;
+            this.label3.Tag = "";
+            this.label3.Text = "Image Cropping";
+            // 
+            // butCancelCrop
+            // 
+            this.butCancelCrop.Location = new System.Drawing.Point(312, 354);
+            this.butCancelCrop.Name = "butCancelCrop";
+            this.butCancelCrop.Size = new System.Drawing.Size(144, 63);
+            this.butCancelCrop.TabIndex = 11;
+            this.butCancelCrop.Text = "Cancel";
+            this.butCancelCrop.UseVisualStyleBackColor = true;
+            this.butCancelCrop.Visible = false;
+            this.butCancelCrop.Click += new System.EventHandler(this.butCancelCrop_Click);
+            // 
+            // butApplyCrop
+            // 
+            this.butApplyCrop.Location = new System.Drawing.Point(105, 354);
+            this.butApplyCrop.Name = "butApplyCrop";
+            this.butApplyCrop.Size = new System.Drawing.Size(160, 63);
+            this.butApplyCrop.TabIndex = 10;
+            this.butApplyCrop.Text = "Apply";
+            this.butApplyCrop.UseVisualStyleBackColor = true;
+            this.butApplyCrop.Visible = false;
+            this.butApplyCrop.Click += new System.EventHandler(this.butApplyCrop_Click);
+            // 
+            // tBarResize
+            // 
+            this.tBarResize.Location = new System.Drawing.Point(12, 63);
+            this.tBarResize.Maximum = 100;
+            this.tBarResize.Name = "tBarResize";
+            this.tBarResize.Size = new System.Drawing.Size(545, 56);
+            this.tBarResize.TabIndex = 9;
+            this.tBarResize.Tag = "9";
+            this.tBarResize.Value = 100;
+            this.tBarResize.Scroll += new System.EventHandler(this.tBarResize_Scroll);
+            this.tBarResize.MouseUp += new System.Windows.Forms.MouseEventHandler(this.tBarResize_MouseUp);
+            // 
+            // btnCrop
+            // 
+            this.btnCrop.Location = new System.Drawing.Point(12, 354);
+            this.btnCrop.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnCrop.Name = "btnCrop";
+            this.btnCrop.Size = new System.Drawing.Size(544, 63);
+            this.btnCrop.TabIndex = 4;
+            this.btnCrop.Tag = "8";
+            this.btnCrop.Text = "Crop";
+            this.btnCrop.UseVisualStyleBackColor = true;
+            this.btnCrop.Click += new System.EventHandler(this.btnCrop_Click);
             // 
             // Label7
             // 
             this.Label7.AutoSize = true;
             this.Label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label7.Location = new System.Drawing.Point(16, 276);
+            this.Label7.Location = new System.Drawing.Point(14, 221);
             this.Label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.Label7.Name = "Label7";
-            this.Label7.Size = new System.Drawing.Size(153, 29);
+            this.Label7.Size = new System.Drawing.Size(125, 25);
             this.Label7.TabIndex = 8;
             this.Label7.Text = "Original size:";
             // 
@@ -227,10 +280,10 @@ namespace iPrint
             // 
             this.lbloriginalSize.AutoSize = true;
             this.lbloriginalSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbloriginalSize.Location = new System.Drawing.Point(167, 276);
+            this.lbloriginalSize.Location = new System.Drawing.Point(148, 221);
             this.lbloriginalSize.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbloriginalSize.Name = "lbloriginalSize";
-            this.lbloriginalSize.Size = new System.Drawing.Size(39, 29);
+            this.lbloriginalSize.Size = new System.Drawing.Size(34, 25);
             this.lbloriginalSize.TabIndex = 7;
             this.lbloriginalSize.Text = "00";
             // 
@@ -238,10 +291,10 @@ namespace iPrint
             // 
             this.lblModifiedSize.AutoSize = true;
             this.lblModifiedSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblModifiedSize.Location = new System.Drawing.Point(167, 320);
+            this.lblModifiedSize.Location = new System.Drawing.Point(148, 256);
             this.lblModifiedSize.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblModifiedSize.Name = "lblModifiedSize";
-            this.lblModifiedSize.Size = new System.Drawing.Size(39, 29);
+            this.lblModifiedSize.Size = new System.Drawing.Size(34, 25);
             this.lblModifiedSize.TabIndex = 6;
             this.lblModifiedSize.Text = "00";
             // 
@@ -249,54 +302,21 @@ namespace iPrint
             // 
             this.Label4.AutoSize = true;
             this.Label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label4.Location = new System.Drawing.Point(8, 316);
+            this.Label4.Location = new System.Drawing.Point(7, 253);
             this.Label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.Label4.Name = "Label4";
-            this.Label4.Size = new System.Drawing.Size(162, 29);
+            this.Label4.Size = new System.Drawing.Size(132, 25);
             this.Label4.TabIndex = 5;
             this.Label4.Text = "Modified size:";
-            // 
-            // btnOk
-            // 
-            this.btnOk.Location = new System.Drawing.Point(170, 92);
-            this.btnOk.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.btnOk.Name = "btnOk";
-            this.btnOk.Size = new System.Drawing.Size(140, 40);
-            this.btnOk.TabIndex = 4;
-            this.btnOk.Tag = "9";
-            this.btnOk.Text = "Ok";
-            this.btnOk.UseVisualStyleBackColor = true;
-            this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
-            // 
-            // Label3
-            // 
-            this.Label3.AutoSize = true;
-            this.Label3.Location = new System.Drawing.Point(138, 105);
-            this.Label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.Label3.Name = "Label3";
-            this.Label3.Size = new System.Drawing.Size(30, 25);
-            this.Label3.TabIndex = 3;
-            this.Label3.Text = "%";
-            // 
-            // DomainUpDown1
-            // 
-            this.DomainUpDown1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.DomainUpDown1.Location = new System.Drawing.Point(16, 97);
-            this.DomainUpDown1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.DomainUpDown1.Name = "DomainUpDown1";
-            this.DomainUpDown1.Size = new System.Drawing.Size(112, 35);
-            this.DomainUpDown1.TabIndex = 2;
-            this.DomainUpDown1.Text = "100";
-            this.DomainUpDown1.SelectedItemChanged += new System.EventHandler(this.DomainUpDown1_SelectedItemChanged);
             // 
             // Label2
             // 
             this.Label2.AutoSize = true;
             this.Label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label2.Location = new System.Drawing.Point(13, 231);
+            this.Label2.Location = new System.Drawing.Point(12, 185);
             this.Label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.Label2.Name = "Label2";
-            this.Label2.Size = new System.Drawing.Size(241, 29);
+            this.Label2.Size = new System.Drawing.Size(198, 25);
             this.Label2.TabIndex = 1;
             this.Label2.Text = "Size setting summery";
             // 
@@ -304,10 +324,10 @@ namespace iPrint
             // 
             this.Label1.AutoSize = true;
             this.Label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label1.Location = new System.Drawing.Point(12, 43);
+            this.Label1.Location = new System.Drawing.Point(11, 34);
             this.Label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.Label1.Name = "Label1";
-            this.Label1.Size = new System.Drawing.Size(298, 20);
+            this.Label1.Size = new System.Drawing.Size(254, 17);
             this.Label1.TabIndex = 0;
             this.Label1.Tag = "";
             this.Label1.Text = "Percantage of original width and height";
@@ -317,11 +337,11 @@ namespace iPrint
             this.TabPage2.Controls.Add(this.Label5);
             this.TabPage2.Controls.Add(this.DomainUpDownBrightness);
             this.TabPage2.Controls.Add(this.TrackBarBrightness);
-            this.TabPage2.Location = new System.Drawing.Point(4, 34);
-            this.TabPage2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.TabPage2.Location = new System.Drawing.Point(4, 29);
+            this.TabPage2.Margin = new System.Windows.Forms.Padding(4);
             this.TabPage2.Name = "TabPage2";
-            this.TabPage2.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.TabPage2.Size = new System.Drawing.Size(635, 572);
+            this.TabPage2.Padding = new System.Windows.Forms.Padding(4);
+            this.TabPage2.Size = new System.Drawing.Size(564, 454);
             this.TabPage2.TabIndex = 1;
             this.TabPage2.Text = "Brightness";
             this.TabPage2.UseVisualStyleBackColor = true;
@@ -330,33 +350,33 @@ namespace iPrint
             // 
             this.Label5.AutoSize = true;
             this.Label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label5.Location = new System.Drawing.Point(22, 34);
+            this.Label5.Location = new System.Drawing.Point(20, 27);
             this.Label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.Label5.Name = "Label5";
-            this.Label5.Size = new System.Drawing.Size(95, 22);
+            this.Label5.Size = new System.Drawing.Size(78, 18);
             this.Label5.TabIndex = 2;
             this.Label5.Text = "Brightness";
             // 
             // DomainUpDownBrightness
             // 
             this.DomainUpDownBrightness.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.DomainUpDownBrightness.Location = new System.Drawing.Point(132, 34);
-            this.DomainUpDownBrightness.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.DomainUpDownBrightness.Location = new System.Drawing.Point(117, 27);
+            this.DomainUpDownBrightness.Margin = new System.Windows.Forms.Padding(4);
             this.DomainUpDownBrightness.Name = "DomainUpDownBrightness";
             this.DomainUpDownBrightness.ReadOnly = true;
-            this.DomainUpDownBrightness.Size = new System.Drawing.Size(133, 35);
+            this.DomainUpDownBrightness.Size = new System.Drawing.Size(118, 30);
             this.DomainUpDownBrightness.TabIndex = 1;
             this.DomainUpDownBrightness.Text = "0";
             // 
             // TrackBarBrightness
             // 
             this.TrackBarBrightness.BackColor = System.Drawing.Color.White;
-            this.TrackBarBrightness.Location = new System.Drawing.Point(8, 85);
-            this.TrackBarBrightness.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.TrackBarBrightness.Location = new System.Drawing.Point(7, 68);
+            this.TrackBarBrightness.Margin = new System.Windows.Forms.Padding(4);
             this.TrackBarBrightness.Maximum = 100;
             this.TrackBarBrightness.Minimum = -100;
             this.TrackBarBrightness.Name = "TrackBarBrightness";
-            this.TrackBarBrightness.Size = new System.Drawing.Size(619, 69);
+            this.TrackBarBrightness.Size = new System.Drawing.Size(550, 56);
             this.TrackBarBrightness.TabIndex = 0;
             this.TrackBarBrightness.Tag = "10";
             this.TrackBarBrightness.Scroll += new System.EventHandler(this.TrackBarBrightness_Scroll);
@@ -367,20 +387,20 @@ namespace iPrint
             this.TabPage4.Controls.Add(this.btnRotateHorizantal);
             this.TabPage4.Controls.Add(this.btnRotatevertical);
             this.TabPage4.Controls.Add(this.btnRotateLeft);
-            this.TabPage4.Location = new System.Drawing.Point(4, 34);
-            this.TabPage4.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.TabPage4.Location = new System.Drawing.Point(4, 29);
+            this.TabPage4.Margin = new System.Windows.Forms.Padding(4);
             this.TabPage4.Name = "TabPage4";
-            this.TabPage4.Size = new System.Drawing.Size(635, 572);
+            this.TabPage4.Size = new System.Drawing.Size(564, 454);
             this.TabPage4.TabIndex = 3;
             this.TabPage4.Text = "Rotate";
             this.TabPage4.UseVisualStyleBackColor = true;
             // 
             // btnRotateRight
             // 
-            this.btnRotateRight.Location = new System.Drawing.Point(335, 53);
-            this.btnRotateRight.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnRotateRight.Location = new System.Drawing.Point(298, 42);
+            this.btnRotateRight.Margin = new System.Windows.Forms.Padding(4);
             this.btnRotateRight.Name = "btnRotateRight";
-            this.btnRotateRight.Size = new System.Drawing.Size(183, 127);
+            this.btnRotateRight.Size = new System.Drawing.Size(163, 102);
             this.btnRotateRight.TabIndex = 3;
             this.btnRotateRight.Tag = "11";
             this.btnRotateRight.Text = "Rotate right";
@@ -389,10 +409,10 @@ namespace iPrint
             // 
             // btnRotateHorizantal
             // 
-            this.btnRotateHorizantal.Location = new System.Drawing.Point(53, 265);
-            this.btnRotateHorizantal.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnRotateHorizantal.Location = new System.Drawing.Point(47, 212);
+            this.btnRotateHorizantal.Margin = new System.Windows.Forms.Padding(4);
             this.btnRotateHorizantal.Name = "btnRotateHorizantal";
-            this.btnRotateHorizantal.Size = new System.Drawing.Size(183, 127);
+            this.btnRotateHorizantal.Size = new System.Drawing.Size(163, 102);
             this.btnRotateHorizantal.TabIndex = 2;
             this.btnRotateHorizantal.Tag = "12";
             this.btnRotateHorizantal.Text = "Rotate horizantal";
@@ -401,10 +421,10 @@ namespace iPrint
             // 
             // btnRotatevertical
             // 
-            this.btnRotatevertical.Location = new System.Drawing.Point(335, 265);
-            this.btnRotatevertical.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnRotatevertical.Location = new System.Drawing.Point(298, 212);
+            this.btnRotatevertical.Margin = new System.Windows.Forms.Padding(4);
             this.btnRotatevertical.Name = "btnRotatevertical";
-            this.btnRotatevertical.Size = new System.Drawing.Size(183, 127);
+            this.btnRotatevertical.Size = new System.Drawing.Size(163, 102);
             this.btnRotatevertical.TabIndex = 1;
             this.btnRotatevertical.Tag = "13";
             this.btnRotatevertical.Text = "Rotate vertical";
@@ -413,10 +433,10 @@ namespace iPrint
             // 
             // btnRotateLeft
             // 
-            this.btnRotateLeft.Location = new System.Drawing.Point(53, 53);
-            this.btnRotateLeft.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnRotateLeft.Location = new System.Drawing.Point(47, 42);
+            this.btnRotateLeft.Margin = new System.Windows.Forms.Padding(4);
             this.btnRotateLeft.Name = "btnRotateLeft";
-            this.btnRotateLeft.Size = new System.Drawing.Size(183, 127);
+            this.btnRotateLeft.Size = new System.Drawing.Size(163, 102);
             this.btnRotateLeft.TabIndex = 0;
             this.btnRotateLeft.Tag = "10";
             this.btnRotateLeft.Text = "Rotate left";
@@ -430,10 +450,11 @@ namespace iPrint
             this.tabPage6.Controls.Add(this.label8);
             this.tabPage6.Controls.Add(this.label6);
             this.tabPage6.Controls.Add(this.butFrameColor);
-            this.tabPage6.Location = new System.Drawing.Point(4, 34);
+            this.tabPage6.Location = new System.Drawing.Point(4, 29);
+            this.tabPage6.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage6.Size = new System.Drawing.Size(635, 572);
+            this.tabPage6.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tabPage6.Size = new System.Drawing.Size(564, 454);
             this.tabPage6.TabIndex = 5;
             this.tabPage6.Text = "Frame";
             this.tabPage6.UseVisualStyleBackColor = true;
@@ -441,11 +462,11 @@ namespace iPrint
             // tBarFrameWidth
             // 
             this.tBarFrameWidth.BackColor = System.Drawing.Color.White;
-            this.tBarFrameWidth.Location = new System.Drawing.Point(17, 267);
-            this.tBarFrameWidth.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.tBarFrameWidth.Location = new System.Drawing.Point(15, 214);
+            this.tBarFrameWidth.Margin = new System.Windows.Forms.Padding(4);
             this.tBarFrameWidth.Maximum = 80;
             this.tBarFrameWidth.Name = "tBarFrameWidth";
-            this.tBarFrameWidth.Size = new System.Drawing.Size(611, 69);
+            this.tBarFrameWidth.Size = new System.Drawing.Size(543, 56);
             this.tBarFrameWidth.TabIndex = 7;
             this.tBarFrameWidth.Tag = "15";
             this.tBarFrameWidth.Scroll += new System.EventHandler(this.tBarFrameWidth_Scroll);
@@ -453,9 +474,10 @@ namespace iPrint
             // numericUpDown1
             // 
             this.numericUpDown1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown1.Location = new System.Drawing.Point(17, 338);
+            this.numericUpDown1.Location = new System.Drawing.Point(15, 270);
+            this.numericUpDown1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(120, 35);
+            this.numericUpDown1.Size = new System.Drawing.Size(107, 30);
             this.numericUpDown1.TabIndex = 5;
             this.numericUpDown1.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
             // 
@@ -463,9 +485,9 @@ namespace iPrint
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(17, 237);
+            this.label8.Location = new System.Drawing.Point(15, 190);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(135, 25);
+            this.label8.Size = new System.Drawing.Size(116, 20);
             this.label8.TabIndex = 4;
             this.label8.Text = "Frame Width";
             // 
@@ -473,9 +495,9 @@ namespace iPrint
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(17, 27);
+            this.label6.Location = new System.Drawing.Point(15, 22);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(212, 25);
+            this.label6.Size = new System.Drawing.Size(182, 20);
             this.label6.TabIndex = 3;
             this.label6.Text = "Choose Frame Color";
             // 
@@ -483,9 +505,10 @@ namespace iPrint
             // 
             this.butFrameColor.BackColor = System.Drawing.Color.Black;
             this.butFrameColor.ForeColor = System.Drawing.SystemColors.Window;
-            this.butFrameColor.Location = new System.Drawing.Point(17, 60);
+            this.butFrameColor.Location = new System.Drawing.Point(15, 48);
+            this.butFrameColor.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.butFrameColor.Name = "butFrameColor";
-            this.butFrameColor.Size = new System.Drawing.Size(213, 104);
+            this.butFrameColor.Size = new System.Drawing.Size(189, 83);
             this.butFrameColor.TabIndex = 2;
             this.butFrameColor.Tag = "14";
             this.butFrameColor.Text = "Color";
@@ -495,18 +518,20 @@ namespace iPrint
             // tabPage7
             // 
             this.tabPage7.Controls.Add(this.btnGrayScale);
-            this.tabPage7.Location = new System.Drawing.Point(4, 34);
+            this.tabPage7.Location = new System.Drawing.Point(4, 29);
+            this.tabPage7.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPage7.Name = "tabPage7";
-            this.tabPage7.Size = new System.Drawing.Size(635, 572);
+            this.tabPage7.Size = new System.Drawing.Size(564, 454);
             this.tabPage7.TabIndex = 6;
             this.tabPage7.Text = "Gray Scale";
             this.tabPage7.UseVisualStyleBackColor = true;
             // 
             // btnGrayScale
             // 
-            this.btnGrayScale.Location = new System.Drawing.Point(30, 50);
+            this.btnGrayScale.Location = new System.Drawing.Point(27, 40);
+            this.btnGrayScale.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnGrayScale.Name = "btnGrayScale";
-            this.btnGrayScale.Size = new System.Drawing.Size(261, 168);
+            this.btnGrayScale.Size = new System.Drawing.Size(232, 134);
             this.btnGrayScale.TabIndex = 0;
             this.btnGrayScale.Tag = "16";
             this.btnGrayScale.Text = "Convert To Black and White";
@@ -528,18 +553,20 @@ namespace iPrint
             this.tabPage8.Controls.Add(this.label14);
             this.tabPage8.Controls.Add(this.btnPPSize);
             this.tabPage8.Controls.Add(this.groupBox1);
-            this.tabPage8.Location = new System.Drawing.Point(4, 34);
+            this.tabPage8.Location = new System.Drawing.Point(4, 29);
+            this.tabPage8.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPage8.Name = "tabPage8";
-            this.tabPage8.Size = new System.Drawing.Size(635, 572);
+            this.tabPage8.Size = new System.Drawing.Size(564, 454);
             this.tabPage8.TabIndex = 7;
             this.tabPage8.Text = "Passport Picture";
             this.tabPage8.UseVisualStyleBackColor = true;
             // 
             // btnApplyPP
             // 
-            this.btnApplyPP.Location = new System.Drawing.Point(393, 395);
+            this.btnApplyPP.Location = new System.Drawing.Point(349, 316);
+            this.btnApplyPP.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnApplyPP.Name = "btnApplyPP";
-            this.btnApplyPP.Size = new System.Drawing.Size(157, 90);
+            this.btnApplyPP.Size = new System.Drawing.Size(140, 72);
             this.btnApplyPP.TabIndex = 12;
             this.btnApplyPP.Tag = "21";
             this.btnApplyPP.Text = "Apply";
@@ -549,9 +576,9 @@ namespace iPrint
             // label22
             // 
             this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(13, 246);
+            this.label22.Location = new System.Drawing.Point(12, 197);
             this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(404, 25);
+            this.label22.Size = new System.Drawing.Size(346, 20);
             this.label22.TabIndex = 10;
             this.label22.Text = "Click the \"Crop\" button to apply your changes";
             // 
@@ -559,18 +586,18 @@ namespace iPrint
             // 
             this.label23.AutoSize = true;
             this.label23.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.label23.Location = new System.Drawing.Point(13, 222);
+            this.label23.Location = new System.Drawing.Point(12, 178);
             this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(70, 25);
+            this.label23.Size = new System.Drawing.Size(57, 20);
             this.label23.TabIndex = 9;
             this.label23.Text = "Step3:";
             // 
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(13, 427);
+            this.label20.Location = new System.Drawing.Point(12, 342);
             this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(124, 25);
+            this.label20.Size = new System.Drawing.Size(104, 20);
             this.label20.TabIndex = 8;
             this.label20.Text = "Click \"Apply\"";
             // 
@@ -578,18 +605,18 @@ namespace iPrint
             // 
             this.label21.AutoSize = true;
             this.label21.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.label21.Location = new System.Drawing.Point(13, 402);
+            this.label21.Location = new System.Drawing.Point(12, 322);
             this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(70, 25);
+            this.label21.Size = new System.Drawing.Size(57, 20);
             this.label21.TabIndex = 7;
             this.label21.Text = "Step5:";
             // 
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(13, 303);
+            this.label18.Location = new System.Drawing.Point(12, 242);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(329, 25);
+            this.label18.Size = new System.Drawing.Size(284, 20);
             this.label18.TabIndex = 6;
             this.label18.Text = "Select the number of copies required";
             // 
@@ -597,18 +624,18 @@ namespace iPrint
             // 
             this.label19.AutoSize = true;
             this.label19.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.label19.Location = new System.Drawing.Point(13, 279);
+            this.label19.Location = new System.Drawing.Point(12, 223);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(70, 25);
+            this.label19.Size = new System.Drawing.Size(57, 20);
             this.label19.TabIndex = 5;
             this.label19.Text = "Step4:";
             // 
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(13, 132);
+            this.label16.Location = new System.Drawing.Point(12, 106);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(398, 50);
+            this.label16.Size = new System.Drawing.Size(343, 40);
             this.label16.TabIndex = 4;
             this.label16.Text = "Move the required section into the focus box.\r\nIf necessary, resize the picture";
             // 
@@ -616,18 +643,18 @@ namespace iPrint
             // 
             this.label17.AutoSize = true;
             this.label17.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.label17.Location = new System.Drawing.Point(13, 106);
+            this.label17.Location = new System.Drawing.Point(12, 85);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(70, 25);
+            this.label17.Size = new System.Drawing.Size(57, 20);
             this.label17.TabIndex = 3;
             this.label17.Text = "Step2:";
             // 
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(13, 48);
+            this.label15.Location = new System.Drawing.Point(12, 38);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(286, 25);
+            this.label15.Size = new System.Drawing.Size(247, 20);
             this.label15.TabIndex = 2;
             this.label15.Text = "Click the button \"Passport Size\"";
             // 
@@ -635,17 +662,18 @@ namespace iPrint
             // 
             this.label14.AutoSize = true;
             this.label14.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.label14.Location = new System.Drawing.Point(13, 23);
+            this.label14.Location = new System.Drawing.Point(12, 18);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(70, 25);
+            this.label14.Size = new System.Drawing.Size(57, 20);
             this.label14.TabIndex = 1;
             this.label14.Text = "Step1:";
             // 
             // btnPPSize
             // 
-            this.btnPPSize.Location = new System.Drawing.Point(393, 15);
+            this.btnPPSize.Location = new System.Drawing.Point(349, 12);
+            this.btnPPSize.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnPPSize.Name = "btnPPSize";
-            this.btnPPSize.Size = new System.Drawing.Size(157, 90);
+            this.btnPPSize.Size = new System.Drawing.Size(140, 72);
             this.btnPPSize.TabIndex = 0;
             this.btnPPSize.Tag = "17";
             this.btnPPSize.Text = "Passport Size";
@@ -657,18 +685,21 @@ namespace iPrint
             this.groupBox1.Controls.Add(this.radBtnX12);
             this.groupBox1.Controls.Add(this.radBtnX8);
             this.groupBox1.Controls.Add(this.radBtnX4);
-            this.groupBox1.Location = new System.Drawing.Point(20, 322);
+            this.groupBox1.Location = new System.Drawing.Point(18, 258);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(599, 67);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.groupBox1.Size = new System.Drawing.Size(532, 54);
             this.groupBox1.TabIndex = 11;
             this.groupBox1.TabStop = false;
             // 
             // radBtnX12
             // 
             this.radBtnX12.AutoSize = true;
-            this.radBtnX12.Location = new System.Drawing.Point(488, 23);
+            this.radBtnX12.Location = new System.Drawing.Point(434, 18);
+            this.radBtnX12.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.radBtnX12.Name = "radBtnX12";
-            this.radBtnX12.Size = new System.Drawing.Size(73, 29);
+            this.radBtnX12.Size = new System.Drawing.Size(59, 24);
             this.radBtnX12.TabIndex = 2;
             this.radBtnX12.TabStop = true;
             this.radBtnX12.Tag = "20";
@@ -679,9 +710,10 @@ namespace iPrint
             // radBtnX8
             // 
             this.radBtnX8.AutoSize = true;
-            this.radBtnX8.Location = new System.Drawing.Point(247, 23);
+            this.radBtnX8.Location = new System.Drawing.Point(220, 18);
+            this.radBtnX8.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.radBtnX8.Name = "radBtnX8";
-            this.radBtnX8.Size = new System.Drawing.Size(62, 29);
+            this.radBtnX8.Size = new System.Drawing.Size(50, 24);
             this.radBtnX8.TabIndex = 1;
             this.radBtnX8.TabStop = true;
             this.radBtnX8.Tag = "19";
@@ -692,9 +724,10 @@ namespace iPrint
             // radBtnX4
             // 
             this.radBtnX4.AutoSize = true;
-            this.radBtnX4.Location = new System.Drawing.Point(17, 23);
+            this.radBtnX4.Location = new System.Drawing.Point(15, 18);
+            this.radBtnX4.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.radBtnX4.Name = "radBtnX4";
-            this.radBtnX4.Size = new System.Drawing.Size(62, 29);
+            this.radBtnX4.Size = new System.Drawing.Size(50, 24);
             this.radBtnX4.TabIndex = 0;
             this.radBtnX4.TabStop = true;
             this.radBtnX4.Tag = "18";
@@ -707,16 +740,18 @@ namespace iPrint
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel1.Controls.Add(this.butUndo);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 610);
+            this.panel1.Location = new System.Drawing.Point(0, 487);
+            this.panel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(643, 89);
+            this.panel1.Size = new System.Drawing.Size(572, 72);
             this.panel1.TabIndex = 2;
             // 
             // butUndo
             // 
-            this.butUndo.Location = new System.Drawing.Point(20, 25);
+            this.butUndo.Location = new System.Drawing.Point(18, 20);
+            this.butUndo.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.butUndo.Name = "butUndo";
-            this.butUndo.Size = new System.Drawing.Size(159, 52);
+            this.butUndo.Size = new System.Drawing.Size(141, 42);
             this.butUndo.TabIndex = 8;
             this.butUndo.Tag = "22";
             this.butUndo.Text = "&Undo";
@@ -730,18 +765,20 @@ namespace iPrint
             this.panelFilmStripMain.Controls.Add(this.butScrollL);
             this.panelFilmStripMain.Controls.Add(this.butScrollR);
             this.panelFilmStripMain.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelFilmStripMain.Location = new System.Drawing.Point(0, 699);
+            this.panelFilmStripMain.Location = new System.Drawing.Point(0, 559);
+            this.panelFilmStripMain.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panelFilmStripMain.Name = "panelFilmStripMain";
-            this.panelFilmStripMain.Size = new System.Drawing.Size(1871, 172);
+            this.panelFilmStripMain.Size = new System.Drawing.Size(1663, 138);
             this.panelFilmStripMain.TabIndex = 2;
             // 
             // panelFilmStrip
             // 
             this.panelFilmStrip.Controls.Add(this.flpThumbnails);
             this.panelFilmStrip.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelFilmStrip.Location = new System.Drawing.Point(75, 0);
+            this.panelFilmStrip.Location = new System.Drawing.Point(67, 0);
+            this.panelFilmStrip.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panelFilmStrip.Name = "panelFilmStrip";
-            this.panelFilmStrip.Size = new System.Drawing.Size(1717, 168);
+            this.panelFilmStrip.Size = new System.Drawing.Size(1525, 134);
             this.panelFilmStrip.TabIndex = 8;
             // 
             // flpThumbnails
@@ -751,9 +788,9 @@ namespace iPrint
             this.flpThumbnails.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.flpThumbnails.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flpThumbnails.Location = new System.Drawing.Point(0, 0);
-            this.flpThumbnails.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.flpThumbnails.Margin = new System.Windows.Forms.Padding(4);
             this.flpThumbnails.Name = "flpThumbnails";
-            this.flpThumbnails.Size = new System.Drawing.Size(1717, 168);
+            this.flpThumbnails.Size = new System.Drawing.Size(1525, 134);
             this.flpThumbnails.TabIndex = 6;
             this.flpThumbnails.WrapContents = false;
             // 
@@ -762,8 +799,9 @@ namespace iPrint
             this.butScrollL.Dock = System.Windows.Forms.DockStyle.Left;
             this.butScrollL.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.butScrollL.Location = new System.Drawing.Point(0, 0);
+            this.butScrollL.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.butScrollL.Name = "butScrollL";
-            this.butScrollL.Size = new System.Drawing.Size(75, 168);
+            this.butScrollL.Size = new System.Drawing.Size(67, 134);
             this.butScrollL.TabIndex = 7;
             this.butScrollL.Text = "<";
             this.butScrollL.UseVisualStyleBackColor = true;
@@ -773,9 +811,10 @@ namespace iPrint
             // 
             this.butScrollR.Dock = System.Windows.Forms.DockStyle.Right;
             this.butScrollR.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.butScrollR.Location = new System.Drawing.Point(1792, 0);
+            this.butScrollR.Location = new System.Drawing.Point(1592, 0);
+            this.butScrollR.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.butScrollR.Name = "butScrollR";
-            this.butScrollR.Size = new System.Drawing.Size(75, 168);
+            this.butScrollR.Size = new System.Drawing.Size(67, 134);
             this.butScrollR.TabIndex = 6;
             this.butScrollR.Text = ">";
             this.butScrollR.UseVisualStyleBackColor = true;
@@ -783,11 +822,11 @@ namespace iPrint
             // 
             // WizardPageEditor
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.Controls.Add(this.panelMain);
-            this.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.Name = "WizardPageEditor";
-            this.Size = new System.Drawing.Size(1871, 871);
+            this.Size = new System.Drawing.Size(1663, 697);
             this.Subtitle = "Use the editor buttons on the right to do basic editing of your pictures";
             this.Title = "Step 3 - Picture editor";
             this.panelMain.ResumeLayout(false);
@@ -797,6 +836,7 @@ namespace iPrint
             this.TabControl1.ResumeLayout(false);
             this.TabPage1.ResumeLayout(false);
             this.TabPage1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tBarResize)).EndInit();
             this.TabPage2.ResumeLayout(false);
             this.TabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TrackBarBrightness)).EndInit();
@@ -839,9 +879,6 @@ namespace iPrint
         internal Label lbloriginalSize;
         internal Label lblModifiedSize;
         internal Label Label4;
-        internal Button btnOk;
-        internal Label Label3;
-        internal DomainUpDown DomainUpDown1;
         internal Label Label2;
         internal Label Label1;
         internal TabPage TabPage2;
@@ -881,6 +918,10 @@ namespace iPrint
         private RadioButton radBtnX8;
         private RadioButton radBtnX4;
         private Button btnApplyPP;
+        private TrackBar tBarResize;
+        internal Label label3;
+        private Button butCancelCrop;
+        private Button butApplyCrop;
 
     }
 }

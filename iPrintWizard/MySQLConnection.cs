@@ -351,6 +351,7 @@ namespace iPrint
             }
             catch (IOException ex)
             {
+                clsGlobalFunctions.ErrorLog(ex); //Log Error
                 MessageBox.Show("Error , unable to backup!");
             }
         }
@@ -383,6 +384,7 @@ namespace iPrint
             }
             catch (IOException ex)
             {
+                clsGlobalFunctions.ErrorLog(ex); //Log Error
                 MessageBox.Show("Error , unable to Restore!");
             }
         }

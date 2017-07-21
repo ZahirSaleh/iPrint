@@ -110,42 +110,11 @@ namespace iPrint
 
         private void btnOk_Click(object sender, EventArgs e)
         {
-            clsGlobalFunctions.CollectStatistics(sender);
-            Bitmap bm_source = new Bitmap(PicBoxEdit.Tag.ToString());
-            // Make a bitmap for the result.
-            Bitmap bm_dest = new Bitmap(Convert.ToInt32(ModifiedImageSize.Width), Convert.ToInt32(ModifiedImageSize.Height));
-            // Make a Graphics object for the result Bitmap.
-            using (Graphics gr_dest = Graphics.FromImage(bm_dest))
-            {
-                // Copy the source image into the destination bitmap.
-                gr_dest.DrawImage(bm_source, 0, 0, bm_dest.Width + 1, bm_dest.Height + 1);                
-            }
-
-            // Display the result.
-            PicBoxEdit.Image = bm_dest;
-            PicBoxEdit.Width = bm_dest.Width;
-            PicBoxEdit.Height = bm_dest.Height;           
-            PictureBoxLocation();
+            
 
         }
 
-        private void DomainUpDown1_SelectedItemChanged(object sender, EventArgs e)
-        {
-            int percentage = 0;
-            try
-            {
-                percentage = Convert.ToInt32(DomainUpDown1.Text);
-                ModifiedImageSize = new Size((OriginalImageSize.Width * percentage) / 100, (OriginalImageSize.Height * percentage) / 100);
-                SetResizeInfo();
-            }
-            catch //(Exception ex)
-            {
-                MessageBox.Show("Invalid Percentage");
-                return;
-            }
-
-        }
-       
+             
         # region "-----------------------------Crop Image------------------------------------"
 
       
@@ -656,25 +625,17 @@ namespace iPrint
             GraphicsUnit units = GraphicsUnit.Point;
 
             RectangleF imgRectangleF = PicBoxEdit.Image.GetBounds(ref units);
-            Rectangle imgSize = Rectangle.Round(imgRectangleF);
-                       
-                if (btnCrop.Text == "Crop")
-                {                   
-                    crop = true;
-                    btnCrop.Text = "Apply";         
+            Rectangle imgSize = Rectangle.Round(imgRectangleF);            
+                      
+                    crop = true;                         
                     rect.rect = smallerCropRectanle(imgSize);
                     newPicture = true; 
-                    PicBoxEdit.Invalidate();                                       
-                }
+                    PicBoxEdit.Invalidate();     
 
-                else
-                {                    
-                    cropPicture(rect.rect);
-                    newPicture = true;
-                    PicBoxEdit.Invalidate();
-                    btnCrop.Text = "Crop";
-                    crop = false;
-                }           
+            butApplyCrop.Visible = true;
+            butCancelCrop.Visible = true;
+            btnCrop.Visible = false;                      
+          
         }
 
         private void btnApplyPP_Click(object sender, EventArgs e)
@@ -777,6 +738,70 @@ namespace iPrint
         private void radBtnX12_CheckedChanged(object sender, EventArgs e)
         {
             clsGlobalFunctions.CollectStatistics(sender);
+        }
+
+        private void tBarResize_Scroll(object sender, EventArgs e)
+        {
+            int percentage = 0;
+            try
+            {
+
+                percentage = tBarResize.Value;// Convert.ToInt32(tBarResize.Value);
+                ModifiedImageSize = new Size((OriginalImageSize.Width * percentage) / 100, (OriginalImageSize.Height * percentage) / 100);
+                SetResizeInfo();
+            }
+            catch //(Exception ex)
+            {
+                MessageBox.Show("Invalid Percentage");
+                return;
+            }
+        }
+
+        private void butApplyCrop_Click(object sender, EventArgs e)
+        {
+           // clsGlobalFunctions.CollectStatistics(sender);
+           
+
+            cropPicture(rect.rect);
+            newPicture = true;
+            PicBoxEdit.Invalidate();
+            btnCrop.Text = "Crop";
+            crop = false;
+
+            butApplyCrop.Visible = false;            
+            butCancelCrop.Visible = false;
+            btnCrop.Visible = true;      
+        }
+
+        private void butCancelCrop_Click(object sender, EventArgs e)
+        {
+            newPicture = true;
+            PicBoxEdit.Invalidate();
+           
+            butApplyCrop.Visible = false;
+            butCancelCrop.Visible = false;
+            btnCrop.Visible = true; 
+        }
+
+        private void tBarResize_MouseUp(object sender, MouseEventArgs e)
+        {
+            clsGlobalFunctions.CollectStatistics(sender);
+            Bitmap bm_source = new Bitmap(PicBoxEdit.Tag.ToString());
+            // Make a bitmap for the result.
+            Bitmap bm_dest = new Bitmap(Convert.ToInt32(ModifiedImageSize.Width), Convert.ToInt32(ModifiedImageSize.Height));
+            // Make a Graphics object for the result Bitmap.
+            using (Graphics gr_dest = Graphics.FromImage(bm_dest))
+            {
+                // Copy the source image into the destination bitmap.
+                gr_dest.DrawImage(bm_source, 0, 0, bm_dest.Width + 1, bm_dest.Height + 1);
+            }
+
+            // Display the result.
+            PicBoxEdit.Image = bm_dest;
+            PicBoxEdit.Width = bm_dest.Width;
+            PicBoxEdit.Height = bm_dest.Height;
+            PictureBoxLocation();
+
         }       
 
 	}

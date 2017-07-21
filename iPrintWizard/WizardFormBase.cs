@@ -39,7 +39,7 @@ namespace WizardFormLib
 
 		#region Events
 		public event WizardPageChangeHandler WizardPageChangeEvent;
-		public event WizardPageCreatedHandler WizardPageCreatedEvent;
+		//public event WizardPageCreatedHandler WizardPageCreatedEvent;
 		public event WizardFormStartedHandler WizardFormStartedEvent;
 		#endregion Events
 

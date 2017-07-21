@@ -130,6 +130,7 @@ namespace iPrint
                         }
                         catch (Exception ex)
                         {
+                            clsGlobalFunctions.ErrorLog(ex); //Log Error
                             fileName = clsGlobalVariables.ScannerFilesDirectory + "\\" + "1.tiff";
                         }
                         SaveImageToTiff(image, fileName);
@@ -137,8 +138,9 @@ namespace iPrint
                     }
                 }
             }
-            catch (Exception err)
+            catch (Exception ex)
             {
+                clsGlobalFunctions.ErrorLog(ex); //Log Error
                 MessageBox.Show("Check the Device Connection \n or \n Change the Scanner Device", "Devic Not Found!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
 

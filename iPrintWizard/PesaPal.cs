@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Pesapal.APIHelper;
 using System.Web;
+using iPrint;
 
 namespace ePayment
 {
@@ -161,7 +162,7 @@ namespace ePayment
             }
             catch (Exception ex)
             {
-                // Handle error
+                clsGlobalFunctions.ErrorLog(ex); //Log Error
                 return "Error";
             }
         }

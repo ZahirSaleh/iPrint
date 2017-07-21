@@ -130,6 +130,19 @@ namespace iPrint
             }
 
         }
+
+        public static void ErrorLog(Exception ex)
+        {
+            string filePath = @"C:\Error.txt";
+
+            using (StreamWriter writer = new StreamWriter(filePath, true))
+            {
+                writer.WriteLine("Message :" + ex.Message + "<br/>" + Environment.NewLine + "StackTrace :" + ex.StackTrace +
+                 "" + Environment.NewLine + "Date :" + DateTime.Now.ToString());
+                writer.WriteLine(Environment.NewLine + "-----------------------------------------------------------------------------" + Environment.NewLine);
+            }
+        }
+
         private static void PrintDoc(Bitmap sendPrint)
         {
             System.Drawing.Printing.PrintDocument pd = new System.Drawing.Printing.PrintDocument();//NULL, args
