@@ -152,8 +152,8 @@ namespace iPrint
             //adjustWindow(w, h);
             int imgWidth = img.Width;
             int imghieght = img.Height;
-            PicBoxEdit.Width = imgWidth;
-            PicBoxEdit.Height = imghieght;
+            //PicBoxEdit.Width = imgWidth;
+            //PicBoxEdit.Height = imghieght;
             PicBoxEdit.Image = System.Drawing.Image.FromStream(imgStream);
             PicBoxEdit.Tag = Filename;
             PictureBoxLocation();
@@ -168,6 +168,9 @@ namespace iPrint
 
         private void PictureBoxLocation()
         {
+            PicBoxEdit.Width = PicBoxEdit.Image.Width;
+            PicBoxEdit.Height = PicBoxEdit.Image.Height;  
+            
             PicBoxEdit.Location = new System.Drawing.Point((panelMainPic.Width - PicBoxEdit.Width) / 2, 
              (panelMainPic.Height - PicBoxEdit.Height) / 2);           
 
@@ -191,26 +194,17 @@ namespace iPrint
             try
             {              
                 Rectangle rect1 = new Rectangle(cropRect.X - movingPoint.X, cropRect.Y - movingPoint.Y, cropRect.Width, cropRect.Height);
-                
-                //First we define a rectangle with the help of already calculated points
-                Bitmap OriginalImage = new Bitmap(PicBoxEdit.Image, PicBoxEdit.Width, PicBoxEdit.Height);
-                //Original image
-                Bitmap _img = new Bitmap(cropRect.Width, cropRect.Height);
-                //for cropinf image
-                using (Graphics g = Graphics.FromImage(_img))
-                {
-                    //create graphics
-                    g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-                    g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
-                    g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
-                    //set image attributes
-                    g.DrawImage(OriginalImage, 0, 0, rect1, GraphicsUnit.Pixel);
-                }
+                          
+                UCAdd(PicBoxEdit.Image);
+                System.Drawing.Bitmap image = (Bitmap)PicBoxEdit.Image;
 
-               
-                PicBoxEdit.Image = _img;               
-                PicBoxEdit.Size = _img.Size;
+                PicBoxEdit.Image = image.Crop(rect1);
+                
+                //adjustWindow(image.Width, image.Height);
                 PictureBoxLocation();
+                UpdatePictureBox();
+                RChanges.Clear();
+                
                
             }
             catch //(Exception ex)
@@ -254,7 +248,7 @@ namespace iPrint
             UCAdd(PicBoxEdit.Image);
             System.Drawing.Bitmap image = (Bitmap)PicBoxEdit.Image;
             PicBoxEdit.Image = image.rotate(90);
-                //adjustWindow(image.Width, image.Height);
+            //adjustWindow(image.Width, image.Height);
             UpdatePictureBox();
             RChanges.Clear();
             
@@ -305,7 +299,7 @@ namespace iPrint
             System.Drawing.Bitmap image = (Bitmap)PicBoxEdit.Image;
             PicBoxEdit.Image = image.DrawFrame(BorderWidth, BorderColor);
             //adjustWindow(image.Width, image.Height);
-           // UpdatePictureBox();
+            UpdatePictureBox();
             RChanges.Clear();
        
         }      
@@ -655,7 +649,11 @@ namespace iPrint
                 passport = true;
                 DrawPassportBox();
                 PicBoxEdit.Invalidate();
-                btnCrop.Text = "Apply";
+                //btnCrop.Text = "Apply";
+                butApplyCrop.Visible = true;
+                butCancelCrop.Visible = true;
+                btnCrop.Visible = false;  
+
                 btnPPSize.Text = "Cancel PP Size";
             }
             else
@@ -663,7 +661,10 @@ namespace iPrint
                 crop = false;
                 passport = false;                
                 PicBoxEdit.Invalidate();
-                btnCrop.Text = "Crop";
+                //btnCrop.Text = "Crop";
+                butApplyCrop.Visible = false;
+                butCancelCrop.Visible = false;
+                btnCrop.Visible = true;  
                 btnPPSize.Text = "Passport Size";
             }
         }
@@ -734,9 +735,19 @@ namespace iPrint
             try
             {
 
-                percentage = tBarResize.Value;// Convert.ToInt32(tBarResize.Value);
+                percentage = tBarResize.Value;
                 ModifiedImageSize = new Size((OriginalImageSize.Width * percentage) / 100, (OriginalImageSize.Height * percentage) / 100);
+                
                 SetResizeInfo();
+               
+                System.Drawing.Bitmap image = (Bitmap)PicBoxEdit.Image;
+                PicBoxEdit.Width = ModifiedImageSize.Width;
+                PicBoxEdit.Height = ModifiedImageSize.Height;
+                PicBoxEdit.SizeMode = PictureBoxSizeMode.CenterImage;
+                PicBoxEdit.Image = image.resize(ModifiedImageSize.Width, ModifiedImageSize.Height);
+                PictureBoxLocation();
+               
+
             }
             catch //(Exception ex)
             {
@@ -773,17 +784,8 @@ namespace iPrint
 
         private void tBarResize_MouseUp(object sender, MouseEventArgs e)
         {
-            clsGlobalFunctions.CollectStatistics(sender);        
-
-            UCAdd(PicBoxEdit.Image);
-            System.Drawing.Bitmap image = (Bitmap)PicBoxEdit.Image;
-            PicBoxEdit.Width = ModifiedImageSize.Width;
-            PicBoxEdit.Height = ModifiedImageSize.Height;
-            PicBoxEdit.SizeMode = PictureBoxSizeMode.CenterImage;
-            PicBoxEdit.Image = image.resize(ModifiedImageSize.Width, ModifiedImageSize.Height);         
-            PictureBoxLocation();
-            RChanges.Clear();   
-            
+            clsGlobalFunctions.CollectStatistics(sender);               
+            RChanges.Clear();              
         }
               
 
@@ -800,8 +802,8 @@ namespace iPrint
             {
                 RCAdd(PicBoxEdit.Image);
                 System.Drawing.Bitmap image = (Bitmap)UChanges.Pop();
-                PicBoxEdit.Width = image.Width;
-                PicBoxEdit.Height = image.Height;
+                //PicBoxEdit.Width = image.Width;
+                //PicBoxEdit.Height = image.Height;
                 PicBoxEdit.Image = image;
                 PictureBoxLocation();
 
@@ -822,8 +824,8 @@ namespace iPrint
             {
                 UCAdd(PicBoxEdit.Image);
                 System.Drawing.Bitmap image = (Bitmap)RChanges.Pop();
-                PicBoxEdit.Width = image.Width;
-                PicBoxEdit.Height = image.Height;
+                //PicBoxEdit.Width = image.Width;
+                //PicBoxEdit.Height = image.Height;
                 PicBoxEdit.Image = image;
                 PictureBoxLocation();
                 
@@ -898,6 +900,11 @@ namespace iPrint
                 MessageBox.Show("Invalid Value");
                 return;
             }
+        }
+
+        private void tBarResize_MouseDown(object sender, MouseEventArgs e)
+        {
+            UCAdd(PicBoxEdit.Image);
         }       
 
 	}

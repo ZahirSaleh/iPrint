@@ -264,6 +264,7 @@ namespace iPrint
             this.tBarResize.Tag = "9";
             this.tBarResize.Value = 100;
             this.tBarResize.Scroll += new System.EventHandler(this.tBarResize_Scroll);
+            this.tBarResize.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tBarResize_MouseDown);
             this.tBarResize.MouseUp += new System.Windows.Forms.MouseEventHandler(this.tBarResize_MouseUp);
             // 
             // btnCrop

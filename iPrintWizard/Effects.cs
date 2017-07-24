@@ -45,6 +45,17 @@ namespace ExtensionMethods
             return filter.Apply(bitmap);
         }
 
+        public static Bitmap Crop(this Bitmap bitmap, Rectangle cropRect)
+        {
+            AForge.Imaging.Filters.Crop filter = new AForge.Imaging.Filters.Crop(cropRect);
+            return filter.Apply(bitmap);
+
+            // create filter
+           // Crop filter = new Crop(new Rectangle(75, 75, 320, 240));
+            // apply the filter
+           // Bitmap newImage = filter.Apply(image);
+        }
+
         public static Bitmap DrawFrame(this Bitmap bitmap, int boarderThickness, Color boarderColor)
         {
             AForge.Imaging.Filters.CanvasCrop filter = new AForge.Imaging.Filters.CanvasCrop(
