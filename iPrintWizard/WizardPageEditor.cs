@@ -11,6 +11,8 @@ using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
 using System.IO;
 using CropRect;
+using ExtensionMethods;
+using System.Linq; 
 
 namespace iPrint
 {
@@ -31,15 +33,18 @@ namespace iPrint
         private const int ThumbWidth = 100;
         private const int ThumbHeight = 100;
         //=======================
-        private Point startingPoint = Point.Empty;
-        private Point movingPoint = Point.Empty;        
+        private System.Drawing.Point startingPoint = System.Drawing.Point.Empty;
+        private System.Drawing.Point movingPoint = System.Drawing.Point.Empty;        
         private bool newPicture = false;      
         String OriginalFilePath_Temp;
         //==========Public Variables==========
         public static bool crop = false;
         public static bool panning = false;
         public static bool passport = false;
-        //========================
+        //===========New Additions=============
+        Stack<Image> UChanges = new Stack<Image>(5);
+        Stack<Image> RChanges = new Stack<Image>(5);
+        //====================================
 
         public WizardPageEditor(WizardFormBase parent) 
 					: base(parent)
@@ -69,14 +74,45 @@ namespace iPrint
 
             rect = new UserRect(clsGlobalVariables.rect64);
             rect.SetPictureBox(this.PicBoxEdit);
+            SetButtonProperties();
             // on invalidate we want to be able to draw the rectangle
            // PicBoxEdit.Paint += new PaintEventHandler(PicBoxEdit_Paint);
 		}
-       
+
+        public void UCAdd(Image img)
+        {
+            UChanges.Push(img);
+            buttUndo.Enabled = true;
+           // PictureBoxLocation();
+        }
+
+        public void RCAdd(Image img)
+        {
+            RChanges.Push(img);
+            buttRedo.Enabled = true;
+           // PictureBoxLocation();
+        }
+
+        private void SetButtonProperties()
+        {
+            // Assign an image to the button.
+            buttUndo.Image = Image.FromFile("C:\\C# Progs\\Projects\\iPrint\\iPrint\\Undo.bmp");
+            buttRedo.Image = Image.FromFile("C:\\C# Progs\\Projects\\iPrint\\iPrint\\Redo.bmp");
+            // Align the image and text on the button.
+            buttUndo.ImageAlign = ContentAlignment.MiddleRight;
+            buttRedo.ImageAlign = ContentAlignment.MiddleRight;
+
+            buttUndo.TextAlign = ContentAlignment.MiddleLeft;
+            buttRedo.TextAlign = ContentAlignment.MiddleLeft;
+            // Give the button a flat appearance.
+            buttUndo.FlatStyle = FlatStyle.Flat;
+            buttRedo.FlatStyle = FlatStyle.Flat;
+        }
+
         private void LoadImage(String Filename)
         {
                         
-            Image Img = Image.FromFile(Filename);
+         /*   Image Img = Image.FromFile(Filename);
             
             //Set the picture box size according to image, we can get image width and height with the help of Image.Width and Image.height properties.
             int imgWidth = Img.Width;
@@ -86,18 +122,38 @@ namespace iPrint
             PicBoxEdit.Image = new Bitmap(Img);//loads a copy of the image
             PicBoxEdit.Tag = Filename;
             PictureBoxLocation();
-            OriginalImageSize = new Size(imgWidth, imghieght);
-            //Img.Dispose();
+            OriginalImageSize = new Size(imgWidth, imghieght);            
             SetResizeInfo();
             PictureBoxLocation(); //===to be checked if necessary======
             EditedBitmap = new Bitmap(Img); //new Bitmap(PicBoxEdit.Image);   
             Img.Dispose();
+            GC.Collect();*/
+            //filename = openFileDialog1.FileName;
+            Image img = System.Drawing.Image.FromFile(Filename);
+            MemoryStream imgStream = new MemoryStream();
+            img.Save(imgStream, System.Drawing.Imaging.ImageFormat.Bmp);
+            //int h = img.Height;
+            //int w = img.Width;
+            //adjustWindow(w, h);
+            int imgWidth = img.Width;
+            int imghieght = img.Height;
+            PicBoxEdit.Width = imgWidth;
+            PicBoxEdit.Height = imghieght;
+            PicBoxEdit.Image = System.Drawing.Image.FromStream(imgStream);
+            PicBoxEdit.Tag = Filename;
+            PictureBoxLocation();
+            OriginalImageSize = new Size(imgWidth, imghieght);
+            SetResizeInfo();
+            img.Dispose();
             GC.Collect();
+            RChanges.Clear();
+            UChanges.Clear();
+
         }
 
         private void PictureBoxLocation()
-        {           
-         PicBoxEdit.Location = new Point((panelMainPic.Width - PicBoxEdit.Width) / 2, 
+        {
+            PicBoxEdit.Location = new System.Drawing.Point((panelMainPic.Width - PicBoxEdit.Width) / 2, 
              (panelMainPic.Height - PicBoxEdit.Height) / 2);           
 
         }
@@ -108,13 +164,7 @@ namespace iPrint
             lblModifiedSize.Text = ModifiedImageSize.ToString();
         }     
 
-        private void btnOk_Click(object sender, EventArgs e)
-        {
-            
-
-        }
-
-             
+                   
         # region "-----------------------------Crop Image------------------------------------"
 
       
@@ -157,8 +207,8 @@ namespace iPrint
         }
         
         private void PictureBox1_MouseDown(object sender, MouseEventArgs e)
-        {            
-            startingPoint = new Point(e.Location.X - movingPoint.X, e.Location.Y - movingPoint.Y);
+        {
+            startingPoint = new System.Drawing.Point(e.Location.X - movingPoint.X, e.Location.Y - movingPoint.Y);
                    
         }
         
@@ -166,8 +216,8 @@ namespace iPrint
         {
             
             if (panning && (e.Button == System.Windows.Forms.MouseButtons.Left))//Panning done here
-            {               
-                movingPoint = new Point(e.Location.X - startingPoint.X,
+            {
+                movingPoint = new System.Drawing.Point(e.Location.X - startingPoint.X,
                                 e.Location.Y - startingPoint.Y);
                 PicBoxEdit.Invalidate();
             }          
@@ -175,68 +225,7 @@ namespace iPrint
         }
         # endregion
 
-        private void TrackBarBrightness_Scroll(object sender, EventArgs e)
-        {
-            clsGlobalFunctions.CollectStatistics(sender);
-            DomainUpDownBrightness.Text = TrackBarBrightness.Value.ToString();
-
-
-            float value = TrackBarBrightness.Value * 0.01f;
-            float[][] colorMatrixElements = {
-	new float[] {
-		1,
-		0,
-		0,
-		0,
-		0
-	},
-	new float[] {
-		0,
-		1,
-		0,
-		0,
-		0
-	},
-	new float[] {
-		0,
-		0,
-		1,
-		0,
-		0
-	},
-	new float[] {
-		0,
-		0,
-		0,
-		1,
-		0
-	},
-	new float[] {
-		value,
-		value,
-		value,
-		0,
-		1
-	}
-};
-            ColorMatrix colorMatrix = new ColorMatrix(colorMatrixElements);
-            ImageAttributes imageAttributes = new ImageAttributes();
-
-            imageAttributes.SetColorMatrix(colorMatrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
-
-            Image _img = Image.FromFile(PicBoxEdit.Tag.ToString());
-            Bitmap bm_dest = new Bitmap(Convert.ToInt32(_img.Width), Convert.ToInt32(_img.Height));
-          
-            using (Graphics _g = Graphics.FromImage(bm_dest))
-            {               
-                _g.DrawImage(_img, new Rectangle(0, 0, bm_dest.Width + 1, bm_dest.Height + 1), 0, 0, bm_dest.Width + 1, bm_dest.Height + 1, GraphicsUnit.Pixel, imageAttributes);
-                PicBoxEdit.Image = bm_dest;
-            }
-            _img.Dispose();
-            _img = null;
-            
-        }
-
+      
         private void UpdatePictureBox()
         {             
             PicBoxEdit.Size = PicBoxEdit.Image.Size;
@@ -246,89 +235,80 @@ namespace iPrint
         private void btnRotateLeft_Click(object sender, EventArgs e)
         {
             clsGlobalFunctions.CollectStatistics(sender);
-            PicBoxEdit.Image.RotateFlip(RotateFlipType.Rotate90FlipNone);
+        
+            UCAdd(PicBoxEdit.Image);
+            System.Drawing.Bitmap image = (Bitmap)PicBoxEdit.Image;
+            PicBoxEdit.Image = image.rotate(90);
+                //adjustWindow(image.Width, image.Height);
             UpdatePictureBox();
+            RChanges.Clear();
+            
         }
 
         private void btnRotateRight_Click(object sender, EventArgs e)
         {
             clsGlobalFunctions.CollectStatistics(sender);
-            PicBoxEdit.Image.RotateFlip(RotateFlipType.Rotate270FlipNone);
+
+            UCAdd(PicBoxEdit.Image);
+            System.Drawing.Bitmap image = (Bitmap)PicBoxEdit.Image;
+            PicBoxEdit.Image = image.rotate(270);
+            //adjustWindow(image.Width, image.Height);
             UpdatePictureBox();
+            RChanges.Clear();
         }
 
         private void btnRotateHorizantal_Click(object sender, EventArgs e)
         {
             clsGlobalFunctions.CollectStatistics(sender);
-            PicBoxEdit.Image.RotateFlip(RotateFlipType.RotateNoneFlipX);
+
+            UCAdd(PicBoxEdit.Image);
+            System.Drawing.Bitmap image = (Bitmap)PicBoxEdit.Image;
+            PicBoxEdit.Image = image.Mirror(false, true);
+            //adjustWindow(image.Width, image.Height);
             UpdatePictureBox();
+            RChanges.Clear();
+
+
         }
 
         private void btnRotatevertical_Click(object sender, EventArgs e)
         {
             clsGlobalFunctions.CollectStatistics(sender);
-            PicBoxEdit.Image.RotateFlip(RotateFlipType.RotateNoneFlipY);
+
+            UCAdd(PicBoxEdit.Image);
+            System.Drawing.Bitmap image = (Bitmap)PicBoxEdit.Image;
+            PicBoxEdit.Image = image.Mirror(true, false);
+            //adjustWindow(image.Width, image.Height);
             UpdatePictureBox();
+            RChanges.Clear();
+
         }
       
         private void DrawFrame()
-        {          
-           
-            Image _img = Image.FromFile(PicBoxEdit.Tag.ToString());
-            Bitmap bitmap = new Bitmap(_img);
-            _img.Dispose();
-            _img = null;
-            
-            using (Graphics g = Graphics.FromImage(bitmap))
-            {
-                g.DrawRectangle(new Pen(BorderColor, BorderWidth), new Rectangle(0, 0, bitmap.Width, bitmap.Height));                
-            }
-
-            PicBoxEdit.Image = bitmap;
-            PicBoxEdit.Size = bitmap.Size;
-
-            PictureBoxLocation();            
+        {    
+            UCAdd(PicBoxEdit.Image);
+            System.Drawing.Bitmap image = (Bitmap)PicBoxEdit.Image;
+            PicBoxEdit.Image = image.DrawFrame(BorderWidth, BorderColor);
+            //adjustWindow(image.Width, image.Height);
+           // UpdatePictureBox();
+            RChanges.Clear();
+       
         }      
             
-        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
-        {
-
-            try
-            {
-                BorderWidth = Convert.ToInt32(numericUpDown1.Text);
-                tBarFrameWidth.Value = Convert.ToInt32(numericUpDown1.Text);
-                DrawFrame();
-            }
-
-            catch //(Exception ex)
-            {
-                MessageBox.Show("Invalid Value");
-                return;
-            }
-
-        }
-       
+              
         private void tBarFrameWidth_Scroll(object sender, EventArgs e)
         {
             clsGlobalFunctions.CollectStatistics(sender);
             numericUpDown1.Text = tBarFrameWidth.Value.ToString();
         }
        
-        private void butUndo_Click(object sender, EventArgs e)
-        {
-            clsGlobalFunctions.CollectStatistics(sender);
-            PicBoxEdit.Image = new Bitmap(EditedBitmap);
-            PicBoxEdit.Width = EditedBitmap.Width;
-            PicBoxEdit.Height = EditedBitmap.Height;
-            PictureBoxLocation();
-        }
-              
+                   
 
         private void FillFilmStrip()
         {
             this.Update();//update the rendering to ensure the thumbnails are well displayed
             // Delete the old PictureBoxes.
-            foreach (PictureBox pic in PictureBoxes)
+            foreach(PictureBox pic in PictureBoxes)
             {
                 pic.Click -= FilmStripBox_Click;
                 pic.Image.Dispose();
@@ -432,6 +412,7 @@ namespace iPrint
             String file_info = pic.Tag.ToString();
             newPicture = true;            
             LoadImage(file_info);
+           
         }
 
         private void butFrameColor_Click(object sender, EventArgs e)
@@ -455,15 +436,7 @@ namespace iPrint
         {          
             FillFilmStrip();           
         }
-        
-        private void TabControl1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            using (Image Img = Image.FromFile(PicBoxEdit.Tag.ToString()))
-            {
-                EditedBitmap = new Bitmap(Img);
-            }            
-        }       
-        
+              
         private void SelectionChecks()
         {
             
@@ -539,11 +512,11 @@ namespace iPrint
 
         private void btnGrayScale_Click(object sender, EventArgs e)
         {
-            clsGlobalFunctions.CollectStatistics(sender);
-            using (Bitmap bm_source = new Bitmap(PicBoxEdit.Image))
-            {
-                PicBoxEdit.Image = clsGlobalFunctions.MakeGrayscale3(bm_source);
-            }           
+           // clsGlobalFunctions.CollectStatistics(sender);
+            UCAdd(PicBoxEdit.Image);
+            System.Drawing.Bitmap image = (Bitmap)PicBoxEdit.Image;
+            PicBoxEdit.Image = image.ToBlackAndWhite();
+            RChanges.Clear();
         }
         
         void DrawPassportBox()
@@ -785,23 +758,131 @@ namespace iPrint
 
         private void tBarResize_MouseUp(object sender, MouseEventArgs e)
         {
-            clsGlobalFunctions.CollectStatistics(sender);
-            Bitmap bm_source = new Bitmap(PicBoxEdit.Tag.ToString());
-            // Make a bitmap for the result.
-            Bitmap bm_dest = new Bitmap(Convert.ToInt32(ModifiedImageSize.Width), Convert.ToInt32(ModifiedImageSize.Height));
-            // Make a Graphics object for the result Bitmap.
-            using (Graphics gr_dest = Graphics.FromImage(bm_dest))
+            clsGlobalFunctions.CollectStatistics(sender);        
+
+            UCAdd(PicBoxEdit.Image);
+            System.Drawing.Bitmap image = (Bitmap)PicBoxEdit.Image;
+            PicBoxEdit.Width = ModifiedImageSize.Width;
+            PicBoxEdit.Height = ModifiedImageSize.Height;
+            PicBoxEdit.SizeMode = PictureBoxSizeMode.CenterImage;
+            PicBoxEdit.Image = image.resize(ModifiedImageSize.Width, ModifiedImageSize.Height);         
+            PictureBoxLocation();
+            RChanges.Clear();   
+            
+        }
+              
+
+        private void butSepia_Click(object sender, EventArgs e)
+        {
+            UCAdd(PicBoxEdit.Image);
+            System.Drawing.Bitmap image = (Bitmap)PicBoxEdit.Image;
+            PicBoxEdit.Image = image.ToSepia();
+            RChanges.Clear();
+        }
+        private void buttUndo_Click(object sender, EventArgs e)
+        {
+            if (UChanges.Count != 0)
             {
-                // Copy the source image into the destination bitmap.
-                gr_dest.DrawImage(bm_source, 0, 0, bm_dest.Width + 1, bm_dest.Height + 1);
+                RCAdd(PicBoxEdit.Image);
+                System.Drawing.Bitmap image = (Bitmap)UChanges.Pop();
+                PicBoxEdit.Width = image.Width;
+                PicBoxEdit.Height = image.Height;
+                PicBoxEdit.Image = image;
+                PictureBoxLocation();
+
+                PictureBoxLocation();
+                if (UChanges.Count == 0)
+                {
+                    buttUndo.Enabled = false;
+                }
+                else
+                {
+                    buttUndo.Enabled = true;
+                }
+            }
+        }
+        private void buttRedo_Click(object sender, EventArgs e)
+        {
+            if (RChanges.Count != 0)
+            {
+                UCAdd(PicBoxEdit.Image);
+                System.Drawing.Bitmap image = (Bitmap)RChanges.Pop();
+                PicBoxEdit.Width = image.Width;
+                PicBoxEdit.Height = image.Height;
+                PicBoxEdit.Image = image;
+                PictureBoxLocation();
+                
+
+                if (RChanges.Count == 0)
+                {
+                    buttRedo.Enabled = false;
+                }
+                else
+                {
+                    buttRedo.Enabled = true;
+                }
+            }
+        }
+
+        private void butPixellate_Click(object sender, EventArgs e)
+        {
+            UCAdd(PicBoxEdit.Image);
+            System.Drawing.Bitmap image = (Bitmap)PicBoxEdit.Image;
+            PicBoxEdit.Image = image.ToPixalation();
+            RChanges.Clear();
+        }
+
+        private void butJitter_Click(object sender, EventArgs e)
+        {
+            UCAdd(PicBoxEdit.Image);
+            System.Drawing.Bitmap image = (Bitmap)PicBoxEdit.Image;
+            PicBoxEdit.Image = image.ToJitter();
+            RChanges.Clear();
+        }
+
+        private void butGaussianBlur_Click(object sender, EventArgs e)
+        {           
+                UCAdd(PicBoxEdit.Image);
+                System.Drawing.Bitmap image = (Bitmap)PicBoxEdit.Image;
+                PicBoxEdit.Image = image.gaussianBlur(tBarGaussianBlur.Value);
+                RChanges.Clear();           
+        }
+
+        private void butInvertColour_Click(object sender, EventArgs e)
+        {
+            UCAdd(PicBoxEdit.Image);
+            System.Drawing.Bitmap image = (Bitmap)PicBoxEdit.Image;
+            PicBoxEdit.Image = image.ToInvert();
+            RChanges.Clear();
+        }
+
+        private void TrackBarBrightness_MouseUp(object sender, MouseEventArgs e)
+        {
+            clsGlobalFunctions.CollectStatistics(sender);
+            DomainUpDownBrightness.Text = TrackBarBrightness.Value.ToString();
+
+            UCAdd(PicBoxEdit.Image);
+            System.Drawing.Bitmap image = (Bitmap)PicBoxEdit.Image;
+            PicBoxEdit.Image = image.BrightnessControl(TrackBarBrightness.Value);
+            //adjustWindow(image.Width, image.Height);
+            UpdatePictureBox();
+            RChanges.Clear();
+        }
+
+        private void tBarFrameWidth_MouseUp(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                BorderWidth = Convert.ToInt32(numericUpDown1.Text);
+                tBarFrameWidth.Value = Convert.ToInt32(numericUpDown1.Text);
+                DrawFrame();
             }
 
-            // Display the result.
-            PicBoxEdit.Image = bm_dest;
-            PicBoxEdit.Width = bm_dest.Width;
-            PicBoxEdit.Height = bm_dest.Height;
-            PictureBoxLocation();
-
+            catch //(Exception ex)
+            {
+                MessageBox.Show("Invalid Value");
+                return;
+            }
         }       
 
 	}

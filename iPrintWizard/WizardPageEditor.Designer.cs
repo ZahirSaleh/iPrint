@@ -73,6 +73,13 @@ namespace iPrint
             this.label6 = new System.Windows.Forms.Label();
             this.butFrameColor = new System.Windows.Forms.Button();
             this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.butInvertColour = new System.Windows.Forms.Button();
+            this.tBarGaussianBlur = new System.Windows.Forms.TrackBar();
+            this.label9 = new System.Windows.Forms.Label();
+            this.butGaussianBlur = new System.Windows.Forms.Button();
+            this.butJitter = new System.Windows.Forms.Button();
+            this.butPixellate = new System.Windows.Forms.Button();
+            this.butSepia = new System.Windows.Forms.Button();
             this.btnGrayScale = new System.Windows.Forms.Button();
             this.tabPage8 = new System.Windows.Forms.TabPage();
             this.btnApplyPP = new System.Windows.Forms.Button();
@@ -92,7 +99,8 @@ namespace iPrint
             this.radBtnX8 = new System.Windows.Forms.RadioButton();
             this.radBtnX4 = new System.Windows.Forms.RadioButton();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.butUndo = new System.Windows.Forms.Button();
+            this.buttRedo = new System.Windows.Forms.Button();
+            this.buttUndo = new System.Windows.Forms.Button();
             this.panelFilmStripMain = new System.Windows.Forms.Panel();
             this.panelFilmStrip = new System.Windows.Forms.Panel();
             this.flpThumbnails = new System.Windows.Forms.FlowLayoutPanel();
@@ -113,6 +121,7 @@ namespace iPrint
             ((System.ComponentModel.ISupportInitialize)(this.tBarFrameWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.tabPage7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tBarGaussianBlur)).BeginInit();
             this.tabPage8.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -134,8 +143,10 @@ namespace iPrint
             // 
             // panelMainPic
             // 
+            this.panelMainPic.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panelMainPic.Controls.Add(this.PicBoxEdit);
-            this.panelMainPic.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelMainPic.Location = new System.Drawing.Point(0, 0);
             this.panelMainPic.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panelMainPic.Name = "panelMainPic";
@@ -144,7 +155,10 @@ namespace iPrint
             // 
             // PicBoxEdit
             // 
-            this.PicBoxEdit.Location = new System.Drawing.Point(2, 2);
+            this.PicBoxEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.PicBoxEdit.Location = new System.Drawing.Point(0, 4);
             this.PicBoxEdit.Margin = new System.Windows.Forms.Padding(4);
             this.PicBoxEdit.Name = "PicBoxEdit";
             this.PicBoxEdit.Size = new System.Drawing.Size(1092, 557);
@@ -181,9 +195,8 @@ namespace iPrint
             this.TabControl1.Margin = new System.Windows.Forms.Padding(4);
             this.TabControl1.Name = "TabControl1";
             this.TabControl1.SelectedIndex = 0;
-            this.TabControl1.Size = new System.Drawing.Size(572, 487);
+            this.TabControl1.Size = new System.Drawing.Size(572, 429);
             this.TabControl1.TabIndex = 4;
-            this.TabControl1.SelectedIndexChanged += new System.EventHandler(this.TabControl1_SelectedIndexChanged);
             // 
             // TabPage1
             // 
@@ -202,7 +215,7 @@ namespace iPrint
             this.TabPage1.Margin = new System.Windows.Forms.Padding(4);
             this.TabPage1.Name = "TabPage1";
             this.TabPage1.Padding = new System.Windows.Forms.Padding(4);
-            this.TabPage1.Size = new System.Drawing.Size(564, 454);
+            this.TabPage1.Size = new System.Drawing.Size(564, 396);
             this.TabPage1.TabIndex = 0;
             this.TabPage1.Text = "Resize/Crop";
             this.TabPage1.UseVisualStyleBackColor = true;
@@ -211,7 +224,7 @@ namespace iPrint
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(16, 317);
+            this.label3.Location = new System.Drawing.Point(16, 275);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(107, 17);
@@ -221,7 +234,7 @@ namespace iPrint
             // 
             // butCancelCrop
             // 
-            this.butCancelCrop.Location = new System.Drawing.Point(312, 354);
+            this.butCancelCrop.Location = new System.Drawing.Point(312, 307);
             this.butCancelCrop.Name = "butCancelCrop";
             this.butCancelCrop.Size = new System.Drawing.Size(144, 63);
             this.butCancelCrop.TabIndex = 11;
@@ -232,7 +245,7 @@ namespace iPrint
             // 
             // butApplyCrop
             // 
-            this.butApplyCrop.Location = new System.Drawing.Point(105, 354);
+            this.butApplyCrop.Location = new System.Drawing.Point(105, 307);
             this.butApplyCrop.Name = "butApplyCrop";
             this.butApplyCrop.Size = new System.Drawing.Size(160, 63);
             this.butApplyCrop.TabIndex = 10;
@@ -255,7 +268,7 @@ namespace iPrint
             // 
             // btnCrop
             // 
-            this.btnCrop.Location = new System.Drawing.Point(12, 354);
+            this.btnCrop.Location = new System.Drawing.Point(12, 307);
             this.btnCrop.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnCrop.Name = "btnCrop";
             this.btnCrop.Size = new System.Drawing.Size(544, 63);
@@ -269,7 +282,7 @@ namespace iPrint
             // 
             this.Label7.AutoSize = true;
             this.Label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label7.Location = new System.Drawing.Point(14, 221);
+            this.Label7.Location = new System.Drawing.Point(14, 179);
             this.Label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.Label7.Name = "Label7";
             this.Label7.Size = new System.Drawing.Size(125, 25);
@@ -280,7 +293,7 @@ namespace iPrint
             // 
             this.lbloriginalSize.AutoSize = true;
             this.lbloriginalSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbloriginalSize.Location = new System.Drawing.Point(148, 221);
+            this.lbloriginalSize.Location = new System.Drawing.Point(148, 179);
             this.lbloriginalSize.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbloriginalSize.Name = "lbloriginalSize";
             this.lbloriginalSize.Size = new System.Drawing.Size(34, 25);
@@ -291,7 +304,7 @@ namespace iPrint
             // 
             this.lblModifiedSize.AutoSize = true;
             this.lblModifiedSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblModifiedSize.Location = new System.Drawing.Point(148, 256);
+            this.lblModifiedSize.Location = new System.Drawing.Point(148, 214);
             this.lblModifiedSize.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblModifiedSize.Name = "lblModifiedSize";
             this.lblModifiedSize.Size = new System.Drawing.Size(34, 25);
@@ -302,7 +315,7 @@ namespace iPrint
             // 
             this.Label4.AutoSize = true;
             this.Label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label4.Location = new System.Drawing.Point(7, 253);
+            this.Label4.Location = new System.Drawing.Point(7, 211);
             this.Label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.Label4.Name = "Label4";
             this.Label4.Size = new System.Drawing.Size(132, 25);
@@ -313,7 +326,7 @@ namespace iPrint
             // 
             this.Label2.AutoSize = true;
             this.Label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label2.Location = new System.Drawing.Point(12, 185);
+            this.Label2.Location = new System.Drawing.Point(12, 143);
             this.Label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.Label2.Name = "Label2";
             this.Label2.Size = new System.Drawing.Size(198, 25);
@@ -341,7 +354,7 @@ namespace iPrint
             this.TabPage2.Margin = new System.Windows.Forms.Padding(4);
             this.TabPage2.Name = "TabPage2";
             this.TabPage2.Padding = new System.Windows.Forms.Padding(4);
-            this.TabPage2.Size = new System.Drawing.Size(564, 454);
+            this.TabPage2.Size = new System.Drawing.Size(564, 396);
             this.TabPage2.TabIndex = 1;
             this.TabPage2.Text = "Brightness";
             this.TabPage2.UseVisualStyleBackColor = true;
@@ -379,7 +392,7 @@ namespace iPrint
             this.TrackBarBrightness.Size = new System.Drawing.Size(550, 56);
             this.TrackBarBrightness.TabIndex = 0;
             this.TrackBarBrightness.Tag = "10";
-            this.TrackBarBrightness.Scroll += new System.EventHandler(this.TrackBarBrightness_Scroll);
+            this.TrackBarBrightness.MouseUp += new System.Windows.Forms.MouseEventHandler(this.TrackBarBrightness_MouseUp);
             // 
             // TabPage4
             // 
@@ -390,7 +403,7 @@ namespace iPrint
             this.TabPage4.Location = new System.Drawing.Point(4, 29);
             this.TabPage4.Margin = new System.Windows.Forms.Padding(4);
             this.TabPage4.Name = "TabPage4";
-            this.TabPage4.Size = new System.Drawing.Size(564, 454);
+            this.TabPage4.Size = new System.Drawing.Size(564, 396);
             this.TabPage4.TabIndex = 3;
             this.TabPage4.Text = "Rotate";
             this.TabPage4.UseVisualStyleBackColor = true;
@@ -454,7 +467,7 @@ namespace iPrint
             this.tabPage6.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPage6.Name = "tabPage6";
             this.tabPage6.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabPage6.Size = new System.Drawing.Size(564, 454);
+            this.tabPage6.Size = new System.Drawing.Size(564, 396);
             this.tabPage6.TabIndex = 5;
             this.tabPage6.Text = "Frame";
             this.tabPage6.UseVisualStyleBackColor = true;
@@ -470,6 +483,7 @@ namespace iPrint
             this.tBarFrameWidth.TabIndex = 7;
             this.tBarFrameWidth.Tag = "15";
             this.tBarFrameWidth.Scroll += new System.EventHandler(this.tBarFrameWidth_Scroll);
+            this.tBarFrameWidth.MouseUp += new System.Windows.Forms.MouseEventHandler(this.tBarFrameWidth_MouseUp);
             // 
             // numericUpDown1
             // 
@@ -479,7 +493,6 @@ namespace iPrint
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(107, 30);
             this.numericUpDown1.TabIndex = 5;
-            this.numericUpDown1.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
             // 
             // label8
             // 
@@ -517,24 +530,101 @@ namespace iPrint
             // 
             // tabPage7
             // 
+            this.tabPage7.Controls.Add(this.butInvertColour);
+            this.tabPage7.Controls.Add(this.tBarGaussianBlur);
+            this.tabPage7.Controls.Add(this.label9);
+            this.tabPage7.Controls.Add(this.butGaussianBlur);
+            this.tabPage7.Controls.Add(this.butJitter);
+            this.tabPage7.Controls.Add(this.butPixellate);
+            this.tabPage7.Controls.Add(this.butSepia);
             this.tabPage7.Controls.Add(this.btnGrayScale);
             this.tabPage7.Location = new System.Drawing.Point(4, 29);
             this.tabPage7.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPage7.Name = "tabPage7";
-            this.tabPage7.Size = new System.Drawing.Size(564, 454);
+            this.tabPage7.Size = new System.Drawing.Size(564, 396);
             this.tabPage7.TabIndex = 6;
-            this.tabPage7.Text = "Gray Scale";
+            this.tabPage7.Text = "Effects";
             this.tabPage7.UseVisualStyleBackColor = true;
+            // 
+            // butInvertColour
+            // 
+            this.butInvertColour.Location = new System.Drawing.Point(17, 276);
+            this.butInvertColour.Name = "butInvertColour";
+            this.butInvertColour.Size = new System.Drawing.Size(109, 101);
+            this.butInvertColour.TabIndex = 15;
+            this.butInvertColour.Text = "Invert Colour";
+            this.butInvertColour.UseVisualStyleBackColor = true;
+            this.butInvertColour.Click += new System.EventHandler(this.butInvertColour_Click);
+            // 
+            // tBarGaussianBlur
+            // 
+            this.tBarGaussianBlur.Location = new System.Drawing.Point(22, 214);
+            this.tBarGaussianBlur.Maximum = 100;
+            this.tBarGaussianBlur.Name = "tBarGaussianBlur";
+            this.tBarGaussianBlur.Size = new System.Drawing.Size(384, 56);
+            this.tBarGaussianBlur.TabIndex = 14;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.Location = new System.Drawing.Point(19, 178);
+            this.label9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(97, 17);
+            this.label9.TabIndex = 13;
+            this.label9.Tag = "";
+            this.label9.Text = "Gaussian Blur";
+            // 
+            // butGaussianBlur
+            // 
+            this.butGaussianBlur.Location = new System.Drawing.Point(412, 204);
+            this.butGaussianBlur.Name = "butGaussianBlur";
+            this.butGaussianBlur.Size = new System.Drawing.Size(110, 93);
+            this.butGaussianBlur.TabIndex = 4;
+            this.butGaussianBlur.Text = "OK";
+            this.butGaussianBlur.UseVisualStyleBackColor = true;
+            this.butGaussianBlur.Click += new System.EventHandler(this.butGaussianBlur_Click);
+            // 
+            // butJitter
+            // 
+            this.butJitter.Location = new System.Drawing.Point(412, 27);
+            this.butJitter.Name = "butJitter";
+            this.butJitter.Size = new System.Drawing.Size(110, 110);
+            this.butJitter.TabIndex = 3;
+            this.butJitter.Text = "Jitter";
+            this.butJitter.UseVisualStyleBackColor = true;
+            this.butJitter.Click += new System.EventHandler(this.butJitter_Click);
+            // 
+            // butPixellate
+            // 
+            this.butPixellate.Location = new System.Drawing.Point(281, 27);
+            this.butPixellate.Name = "butPixellate";
+            this.butPixellate.Size = new System.Drawing.Size(110, 110);
+            this.butPixellate.TabIndex = 2;
+            this.butPixellate.Text = "Pixellate";
+            this.butPixellate.UseVisualStyleBackColor = true;
+            this.butPixellate.Click += new System.EventHandler(this.butPixellate_Click);
+            // 
+            // butSepia
+            // 
+            this.butSepia.Location = new System.Drawing.Point(16, 27);
+            this.butSepia.Name = "butSepia";
+            this.butSepia.Size = new System.Drawing.Size(110, 110);
+            this.butSepia.TabIndex = 1;
+            this.butSepia.Text = "Sepia";
+            this.butSepia.UseVisualStyleBackColor = true;
+            this.butSepia.Click += new System.EventHandler(this.butSepia_Click);
             // 
             // btnGrayScale
             // 
-            this.btnGrayScale.Location = new System.Drawing.Point(27, 40);
+            this.btnGrayScale.Location = new System.Drawing.Point(147, 27);
             this.btnGrayScale.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnGrayScale.Name = "btnGrayScale";
-            this.btnGrayScale.Size = new System.Drawing.Size(232, 134);
+            this.btnGrayScale.Size = new System.Drawing.Size(110, 110);
             this.btnGrayScale.TabIndex = 0;
             this.btnGrayScale.Tag = "16";
-            this.btnGrayScale.Text = "Convert To Black and White";
+            this.btnGrayScale.Text = "Black and White";
             this.btnGrayScale.UseVisualStyleBackColor = true;
             this.btnGrayScale.Click += new System.EventHandler(this.btnGrayScale_Click);
             // 
@@ -556,7 +646,7 @@ namespace iPrint
             this.tabPage8.Location = new System.Drawing.Point(4, 29);
             this.tabPage8.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPage8.Name = "tabPage8";
-            this.tabPage8.Size = new System.Drawing.Size(564, 454);
+            this.tabPage8.Size = new System.Drawing.Size(564, 396);
             this.tabPage8.TabIndex = 7;
             this.tabPage8.Text = "Passport Picture";
             this.tabPage8.UseVisualStyleBackColor = true;
@@ -738,25 +828,36 @@ namespace iPrint
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panel1.Controls.Add(this.butUndo);
+            this.panel1.Controls.Add(this.buttRedo);
+            this.panel1.Controls.Add(this.buttUndo);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 487);
+            this.panel1.Location = new System.Drawing.Point(0, 429);
             this.panel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(572, 72);
+            this.panel1.Size = new System.Drawing.Size(572, 130);
             this.panel1.TabIndex = 2;
             // 
-            // butUndo
+            // buttRedo
             // 
-            this.butUndo.Location = new System.Drawing.Point(18, 20);
-            this.butUndo.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.butUndo.Name = "butUndo";
-            this.butUndo.Size = new System.Drawing.Size(141, 42);
-            this.butUndo.TabIndex = 8;
-            this.butUndo.Tag = "22";
-            this.butUndo.Text = "&Undo";
-            this.butUndo.UseVisualStyleBackColor = true;
-            this.butUndo.Click += new System.EventHandler(this.butUndo_Click);
+            this.buttRedo.Enabled = false;
+            this.buttRedo.Location = new System.Drawing.Point(381, 10);
+            this.buttRedo.Name = "buttRedo";
+            this.buttRedo.Size = new System.Drawing.Size(177, 113);
+            this.buttRedo.TabIndex = 10;
+            this.buttRedo.Text = "Redo";
+            this.buttRedo.UseVisualStyleBackColor = true;
+            this.buttRedo.Click += new System.EventHandler(this.buttRedo_Click);
+            // 
+            // buttUndo
+            // 
+            this.buttUndo.Enabled = false;
+            this.buttUndo.Location = new System.Drawing.Point(165, 8);
+            this.buttUndo.Name = "buttUndo";
+            this.buttUndo.Size = new System.Drawing.Size(182, 115);
+            this.buttUndo.TabIndex = 9;
+            this.buttUndo.Text = "Undo";
+            this.buttUndo.UseVisualStyleBackColor = true;
+            this.buttUndo.Click += new System.EventHandler(this.buttUndo_Click);
             // 
             // panelFilmStripMain
             // 
@@ -846,6 +947,8 @@ namespace iPrint
             ((System.ComponentModel.ISupportInitialize)(this.tBarFrameWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.tabPage7.ResumeLayout(false);
+            this.tabPage7.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tBarGaussianBlur)).EndInit();
             this.tabPage8.ResumeLayout(false);
             this.tabPage8.PerformLayout();
             this.groupBox1.ResumeLayout(false);
@@ -867,7 +970,7 @@ namespace iPrint
         private System.Windows.Forms.Button butScrollR;
         private System.Windows.Forms.ColorDialog colorDialog1;
         private Color BorderColor = Color.Black;
-        Bitmap EditedBitmap;
+       // Bitmap EditedBitmap;
         int BorderWidth = 0;
         PictureBox SelectedPictureBox = null;
         private Panel panelMainPic;
@@ -899,7 +1002,6 @@ namespace iPrint
         private TabPage tabPage7;
         private Button btnGrayScale;
         private Panel panel1;
-        private Button butUndo;
         private TabPage tabPage8;
         private Button btnCrop;
         private Button btnPPSize;
@@ -922,6 +1024,15 @@ namespace iPrint
         internal Label label3;
         private Button butCancelCrop;
         private Button butApplyCrop;
+        private Button buttRedo;
+        private Button buttUndo;
+        private Button butSepia;
+        private Button butPixellate;
+        private Button butJitter;
+        private Button butGaussianBlur;
+        private TrackBar tBarGaussianBlur;
+        internal Label label9;
+        private Button butInvertColour;
 
     }
 }

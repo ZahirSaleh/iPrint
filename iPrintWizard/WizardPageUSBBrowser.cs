@@ -73,6 +73,7 @@ namespace iPrint
             if (directoryInfo.Exists)
             {
                 treeView1.AfterSelect += treeView1_AfterSelect;
+                treeView1.Nodes.Clear();
                 BuildTree(directoryInfo, treeView1.Nodes);
             }
         }

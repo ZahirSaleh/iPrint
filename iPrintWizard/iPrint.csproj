@@ -57,6 +57,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AForge.Imaging, Version=2.2.5.0, Culture=neutral, PublicKeyToken=ba8ddea9676ca48b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Program Files (x86)\AForge.NET\Framework\Release\AForge.Imaging.dll</HintPath>
+    </Reference>
     <Reference Include="Interop.WIA, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>False</EmbedInteropTypes>
@@ -90,6 +94,7 @@
   <ItemGroup>
     <Compile Include="clsGlobalFunctions.cs" />
     <Compile Include="clsGlobalVariables.cs" />
+    <Compile Include="Effects.cs" />
     <Compile Include="ImageResize.cs" />
     <Compile Include="WizardPageUSBBrowser.cs">
       <SubType>UserControl</SubType>

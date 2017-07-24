@@ -16,41 +16,7 @@ namespace iPrint
     public class clsGlobalFunctions
     {
 
-        public static Bitmap MakeGrayscale3(Bitmap original)
-        {
-            //create a blank bitmap the same size as original
-            Bitmap newBitmap = new Bitmap(original.Width, original.Height);
-
-            //get a graphics object from the new image
-            using (Graphics g = Graphics.FromImage(newBitmap))
-            {
-
-                //create the grayscale ColorMatrix
-                System.Drawing.Imaging.ColorMatrix colorMatrix = new System.Drawing.Imaging.ColorMatrix(
-                   new float[][] 
-                {
-                new float[] {.3f, .3f, .3f, 0, 0},
-                new float[] {.59f, .59f, .59f, 0, 0},
-                new float[] {.11f, .11f, .11f, 0, 0},
-                new float[] {0, 0, 0, 1, 0},
-                new float[] {0, 0, 0, 0, 1}
-                });
-
-                //create some image attributes
-                System.Drawing.Imaging.ImageAttributes attributes = new System.Drawing.Imaging.ImageAttributes();
-
-                //set the color matrix attribute
-                attributes.SetColorMatrix(colorMatrix);
-
-                //draw the original image on the new image
-                //using the grayscale color matrix
-                g.DrawImage(original, new Rectangle(0, 0, original.Width, original.Height),
-                   0, 0, original.Width, original.Height, GraphicsUnit.Pixel, attributes);
-
-                //dispose the Graphics object
-            }
-            return newBitmap;
-        }
+     
 
         public static Color ContrastColor(Color color)
         {
@@ -67,34 +33,7 @@ namespace iPrint
             return Color.FromArgb(d, d, d);
         }
 
-        public static Bitmap Make_BW(Bitmap original)
-        {
-
-            Bitmap output = new Bitmap(original.Width, original.Height);
-
-            for (int i = 0; i < original.Width; i++)
-            {
-
-                for (int j = 0; j < original.Height; j++)
-                {
-
-                    Color c = original.GetPixel(i, j);
-
-                    int average = ((c.R + c.B + c.G) / 3);
-
-                    if (average < 200)
-                        output.SetPixel(i, j, Color.Black);
-
-                    else
-                        output.SetPixel(i, j, Color.White);
-
-                }
-            }
-
-            return output;
-
-        }
-
+      
         public static void CollectStatistics(object sender)
         {
             Control This = (Control)sender;

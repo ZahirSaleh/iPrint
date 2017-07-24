@@ -12,6 +12,7 @@ using System.IO;
 using Ozeki.Media.MediaHandlers;
 using Ozeki.Media.MediaHandlers.Video;
 using Ozeki.Media.Video.Controls;
+using ExtensionMethods;
 
 
 using WizardFormLib;
@@ -334,7 +335,7 @@ namespace iPrint
             {
                 panelVideo.DrawToBitmap(bmp, panelVideo.Bounds);
                 picBoxSnapshot.SizeMode = PictureBoxSizeMode.Zoom;
-                picBoxSnapshot.Image = clsGlobalFunctions.MakeGrayscale3(bmp);
+                picBoxSnapshot.Image = bmp.ToBlackAndWhite(); 
             }            
         }
           
