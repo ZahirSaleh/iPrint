@@ -96,8 +96,23 @@ namespace iPrint
         private void SetButtonProperties()
         {
             // Assign an image to the button.
-            buttUndo.Image = Image.FromFile("C:\\C# Progs\\Projects\\iPrint\\iPrint\\Undo.bmp");
-            buttRedo.Image = Image.FromFile("C:\\C# Progs\\Projects\\iPrint\\iPrint\\Redo.bmp");
+           
+           
+            //=========================================
+            System.Reflection.Assembly myAssembly = System.Reflection.Assembly.GetExecutingAssembly();
+            Stream StreamUndo = myAssembly.GetManifestResourceStream("iPrint.Undo.bmp");
+            Bitmap imageUndo = new Bitmap(StreamUndo);
+            buttUndo.Image = imageUndo;
+
+            Stream StreamRedo = myAssembly.GetManifestResourceStream("iPrint.Redo.bmp");
+            Bitmap imageRedo = new Bitmap(StreamRedo);
+            buttRedo.Image = imageRedo;
+
+          
+            //=========================================
+
+
+
             // Align the image and text on the button.
             buttUndo.ImageAlign = ContentAlignment.MiddleRight;
             buttRedo.ImageAlign = ContentAlignment.MiddleRight;

@@ -67,7 +67,10 @@
       <HintPath>..\..\..\Interop.WIA.dll\Interop.WIA.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="MySql.Data, Version=6.9.5.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
+    <Reference Include="MySql.Data, Version=6.9.5.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\MySql.Data.dll</HintPath>
+    </Reference>
     <Reference Include="PesaPal.APIHelper.4.0">
       <HintPath>..\PesaPal.APIHelper.4.0.dll</HintPath>
     </Reference>
@@ -267,6 +270,10 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Redo.bmp" />
+    <EmbeddedResource Include="Undo.bmp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
