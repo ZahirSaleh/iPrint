@@ -44,6 +44,10 @@ namespace iPrint
             this.panelMainPic = new System.Windows.Forms.Panel();
             this.PicBoxEdit = new System.Windows.Forms.PictureBox();
             this.panelEdit = new System.Windows.Forms.Panel();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.butApply = new System.Windows.Forms.Button();
+            this.buttRedo = new System.Windows.Forms.Button();
+            this.buttUndo = new System.Windows.Forms.Button();
             this.TabControl1 = new System.Windows.Forms.TabControl();
             this.TabPage1 = new System.Windows.Forms.TabPage();
             this.label3 = new System.Windows.Forms.Label();
@@ -57,10 +61,6 @@ namespace iPrint
             this.Label4 = new System.Windows.Forms.Label();
             this.Label2 = new System.Windows.Forms.Label();
             this.Label1 = new System.Windows.Forms.Label();
-            this.TabPage2 = new System.Windows.Forms.TabPage();
-            this.Label5 = new System.Windows.Forms.Label();
-            this.DomainUpDownBrightness = new System.Windows.Forms.DomainUpDown();
-            this.TrackBarBrightness = new System.Windows.Forms.TrackBar();
             this.TabPage4 = new System.Windows.Forms.TabPage();
             this.btnRotateRight = new System.Windows.Forms.Button();
             this.btnRotateHorizantal = new System.Windows.Forms.Button();
@@ -73,10 +73,11 @@ namespace iPrint
             this.label6 = new System.Windows.Forms.Label();
             this.butFrameColor = new System.Windows.Forms.Button();
             this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.Label5 = new System.Windows.Forms.Label();
+            this.TrackBarBrightness = new System.Windows.Forms.TrackBar();
             this.butInvertColour = new System.Windows.Forms.Button();
             this.tBarGaussianBlur = new System.Windows.Forms.TrackBar();
             this.label9 = new System.Windows.Forms.Label();
-            this.butGaussianBlur = new System.Windows.Forms.Button();
             this.butJitter = new System.Windows.Forms.Button();
             this.butPixellate = new System.Windows.Forms.Button();
             this.butSepia = new System.Windows.Forms.Button();
@@ -98,9 +99,6 @@ namespace iPrint
             this.radBtnX12 = new System.Windows.Forms.RadioButton();
             this.radBtnX8 = new System.Windows.Forms.RadioButton();
             this.radBtnX4 = new System.Windows.Forms.RadioButton();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.buttRedo = new System.Windows.Forms.Button();
-            this.buttUndo = new System.Windows.Forms.Button();
             this.panelFilmStripMain = new System.Windows.Forms.Panel();
             this.panelFilmStrip = new System.Windows.Forms.Panel();
             this.flpThumbnails = new System.Windows.Forms.FlowLayoutPanel();
@@ -111,30 +109,31 @@ namespace iPrint
             this.panelMainPic.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PicBoxEdit)).BeginInit();
             this.panelEdit.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.TabControl1.SuspendLayout();
             this.TabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tBarResize)).BeginInit();
-            this.TabPage2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.TrackBarBrightness)).BeginInit();
             this.TabPage4.SuspendLayout();
             this.tabPage6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tBarFrameWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.tabPage7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.TrackBarBrightness)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tBarGaussianBlur)).BeginInit();
             this.tabPage8.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            this.panel1.SuspendLayout();
             this.panelFilmStripMain.SuspendLayout();
             this.panelFilmStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelMain
             // 
+            this.panelMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panelMain.Controls.Add(this.panelMainPic);
             this.panelMain.Controls.Add(this.panelEdit);
             this.panelMain.Controls.Add(this.panelFilmStripMain);
-            this.panelMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelMain.Location = new System.Drawing.Point(0, 0);
             this.panelMain.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panelMain.Name = "panelMain";
@@ -150,18 +149,16 @@ namespace iPrint
             this.panelMainPic.Location = new System.Drawing.Point(0, 0);
             this.panelMainPic.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panelMainPic.Name = "panelMainPic";
-            this.panelMainPic.Size = new System.Drawing.Size(1091, 559);
+            this.panelMainPic.Size = new System.Drawing.Size(997, 559);
             this.panelMainPic.TabIndex = 13;
             // 
             // PicBoxEdit
             // 
-            this.PicBoxEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.PicBoxEdit.Location = new System.Drawing.Point(0, 4);
+            this.PicBoxEdit.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.PicBoxEdit.Location = new System.Drawing.Point(0, 0);
             this.PicBoxEdit.Margin = new System.Windows.Forms.Padding(4);
             this.PicBoxEdit.Name = "PicBoxEdit";
-            this.PicBoxEdit.Size = new System.Drawing.Size(1092, 557);
+            this.PicBoxEdit.Size = new System.Drawing.Size(997, 559);
             this.PicBoxEdit.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.PicBoxEdit.TabIndex = 2;
             this.PicBoxEdit.TabStop = false;
@@ -172,30 +169,77 @@ namespace iPrint
             // 
             // panelEdit
             // 
-            this.panelEdit.Controls.Add(this.TabControl1);
             this.panelEdit.Controls.Add(this.panel1);
+            this.panelEdit.Controls.Add(this.TabControl1);
             this.panelEdit.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panelEdit.Location = new System.Drawing.Point(1091, 0);
+            this.panelEdit.Location = new System.Drawing.Point(997, 0);
             this.panelEdit.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panelEdit.Name = "panelEdit";
-            this.panelEdit.Size = new System.Drawing.Size(572, 559);
+            this.panelEdit.Size = new System.Drawing.Size(666, 559);
             this.panelEdit.TabIndex = 12;
+            // 
+            // panel1
+            // 
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel1.Controls.Add(this.butApply);
+            this.panel1.Controls.Add(this.buttRedo);
+            this.panel1.Controls.Add(this.buttUndo);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel1.Location = new System.Drawing.Point(0, 422);
+            this.panel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(666, 137);
+            this.panel1.TabIndex = 5;
+            // 
+            // butApply
+            // 
+            this.butApply.Location = new System.Drawing.Point(425, 10);
+            this.butApply.Name = "butApply";
+            this.butApply.Size = new System.Drawing.Size(219, 115);
+            this.butApply.TabIndex = 11;
+            this.butApply.Text = "Apply";
+            this.butApply.UseVisualStyleBackColor = true;
+            // 
+            // buttRedo
+            // 
+            this.buttRedo.Enabled = false;
+            this.buttRedo.Location = new System.Drawing.Point(186, 10);
+            this.buttRedo.Name = "buttRedo";
+            this.buttRedo.Size = new System.Drawing.Size(154, 115);
+            this.buttRedo.TabIndex = 10;
+            this.buttRedo.Text = "Redo";
+            this.buttRedo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttRedo.UseVisualStyleBackColor = true;
+            this.buttRedo.Click += new System.EventHandler(this.buttRedo_Click);
+            // 
+            // buttUndo
+            // 
+            this.buttUndo.Enabled = false;
+            this.buttUndo.Location = new System.Drawing.Point(16, 10);
+            this.buttUndo.Name = "buttUndo";
+            this.buttUndo.Size = new System.Drawing.Size(154, 115);
+            this.buttUndo.TabIndex = 9;
+            this.buttUndo.Text = "Undo";
+            this.buttUndo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttUndo.UseVisualStyleBackColor = true;
+            this.buttUndo.Click += new System.EventHandler(this.buttUndo_Click);
             // 
             // TabControl1
             // 
+            this.TabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.TabControl1.Controls.Add(this.TabPage1);
-            this.TabControl1.Controls.Add(this.TabPage2);
             this.TabControl1.Controls.Add(this.TabPage4);
             this.TabControl1.Controls.Add(this.tabPage6);
             this.TabControl1.Controls.Add(this.tabPage7);
             this.TabControl1.Controls.Add(this.tabPage8);
-            this.TabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TabControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TabControl1.Location = new System.Drawing.Point(0, 0);
             this.TabControl1.Margin = new System.Windows.Forms.Padding(4);
             this.TabControl1.Name = "TabControl1";
             this.TabControl1.SelectedIndex = 0;
-            this.TabControl1.Size = new System.Drawing.Size(572, 429);
+            this.TabControl1.Size = new System.Drawing.Size(666, 416);
             this.TabControl1.TabIndex = 4;
             // 
             // TabPage1
@@ -215,7 +259,7 @@ namespace iPrint
             this.TabPage1.Margin = new System.Windows.Forms.Padding(4);
             this.TabPage1.Name = "TabPage1";
             this.TabPage1.Padding = new System.Windows.Forms.Padding(4);
-            this.TabPage1.Size = new System.Drawing.Size(564, 396);
+            this.TabPage1.Size = new System.Drawing.Size(658, 383);
             this.TabPage1.TabIndex = 0;
             this.TabPage1.Text = "Resize/Crop";
             this.TabPage1.UseVisualStyleBackColor = true;
@@ -234,7 +278,7 @@ namespace iPrint
             // 
             // butCancelCrop
             // 
-            this.butCancelCrop.Location = new System.Drawing.Point(312, 307);
+            this.butCancelCrop.Location = new System.Drawing.Point(379, 307);
             this.butCancelCrop.Name = "butCancelCrop";
             this.butCancelCrop.Size = new System.Drawing.Size(144, 63);
             this.butCancelCrop.TabIndex = 11;
@@ -259,7 +303,7 @@ namespace iPrint
             this.tBarResize.Location = new System.Drawing.Point(12, 63);
             this.tBarResize.Maximum = 100;
             this.tBarResize.Name = "tBarResize";
-            this.tBarResize.Size = new System.Drawing.Size(545, 56);
+            this.tBarResize.Size = new System.Drawing.Size(630, 56);
             this.tBarResize.TabIndex = 9;
             this.tBarResize.Tag = "9";
             this.tBarResize.Value = 100;
@@ -272,7 +316,7 @@ namespace iPrint
             this.btnCrop.Location = new System.Drawing.Point(12, 307);
             this.btnCrop.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnCrop.Name = "btnCrop";
-            this.btnCrop.Size = new System.Drawing.Size(544, 63);
+            this.btnCrop.Size = new System.Drawing.Size(639, 63);
             this.btnCrop.TabIndex = 4;
             this.btnCrop.Tag = "8";
             this.btnCrop.Text = "Crop";
@@ -346,55 +390,6 @@ namespace iPrint
             this.Label1.Tag = "";
             this.Label1.Text = "Percantage of original width and height";
             // 
-            // TabPage2
-            // 
-            this.TabPage2.Controls.Add(this.Label5);
-            this.TabPage2.Controls.Add(this.DomainUpDownBrightness);
-            this.TabPage2.Controls.Add(this.TrackBarBrightness);
-            this.TabPage2.Location = new System.Drawing.Point(4, 29);
-            this.TabPage2.Margin = new System.Windows.Forms.Padding(4);
-            this.TabPage2.Name = "TabPage2";
-            this.TabPage2.Padding = new System.Windows.Forms.Padding(4);
-            this.TabPage2.Size = new System.Drawing.Size(564, 396);
-            this.TabPage2.TabIndex = 1;
-            this.TabPage2.Text = "Brightness";
-            this.TabPage2.UseVisualStyleBackColor = true;
-            // 
-            // Label5
-            // 
-            this.Label5.AutoSize = true;
-            this.Label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Label5.Location = new System.Drawing.Point(20, 27);
-            this.Label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.Label5.Name = "Label5";
-            this.Label5.Size = new System.Drawing.Size(78, 18);
-            this.Label5.TabIndex = 2;
-            this.Label5.Text = "Brightness";
-            // 
-            // DomainUpDownBrightness
-            // 
-            this.DomainUpDownBrightness.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.DomainUpDownBrightness.Location = new System.Drawing.Point(117, 27);
-            this.DomainUpDownBrightness.Margin = new System.Windows.Forms.Padding(4);
-            this.DomainUpDownBrightness.Name = "DomainUpDownBrightness";
-            this.DomainUpDownBrightness.ReadOnly = true;
-            this.DomainUpDownBrightness.Size = new System.Drawing.Size(118, 30);
-            this.DomainUpDownBrightness.TabIndex = 1;
-            this.DomainUpDownBrightness.Text = "0";
-            // 
-            // TrackBarBrightness
-            // 
-            this.TrackBarBrightness.BackColor = System.Drawing.Color.White;
-            this.TrackBarBrightness.Location = new System.Drawing.Point(7, 68);
-            this.TrackBarBrightness.Margin = new System.Windows.Forms.Padding(4);
-            this.TrackBarBrightness.Maximum = 100;
-            this.TrackBarBrightness.Minimum = -100;
-            this.TrackBarBrightness.Name = "TrackBarBrightness";
-            this.TrackBarBrightness.Size = new System.Drawing.Size(550, 56);
-            this.TrackBarBrightness.TabIndex = 0;
-            this.TrackBarBrightness.Tag = "10";
-            this.TrackBarBrightness.MouseUp += new System.Windows.Forms.MouseEventHandler(this.TrackBarBrightness_MouseUp);
-            // 
             // TabPage4
             // 
             this.TabPage4.Controls.Add(this.btnRotateRight);
@@ -404,56 +399,56 @@ namespace iPrint
             this.TabPage4.Location = new System.Drawing.Point(4, 29);
             this.TabPage4.Margin = new System.Windows.Forms.Padding(4);
             this.TabPage4.Name = "TabPage4";
-            this.TabPage4.Size = new System.Drawing.Size(564, 396);
+            this.TabPage4.Size = new System.Drawing.Size(658, 383);
             this.TabPage4.TabIndex = 3;
             this.TabPage4.Text = "Rotate";
             this.TabPage4.UseVisualStyleBackColor = true;
             // 
             // btnRotateRight
             // 
-            this.btnRotateRight.Location = new System.Drawing.Point(298, 42);
+            this.btnRotateRight.Location = new System.Drawing.Point(362, 42);
             this.btnRotateRight.Margin = new System.Windows.Forms.Padding(4);
             this.btnRotateRight.Name = "btnRotateRight";
             this.btnRotateRight.Size = new System.Drawing.Size(163, 102);
             this.btnRotateRight.TabIndex = 3;
             this.btnRotateRight.Tag = "11";
-            this.btnRotateRight.Text = "Rotate right";
+            this.btnRotateRight.Text = "Rotate Right";
             this.btnRotateRight.UseVisualStyleBackColor = true;
             this.btnRotateRight.Click += new System.EventHandler(this.btnRotateRight_Click);
             // 
             // btnRotateHorizantal
             // 
-            this.btnRotateHorizantal.Location = new System.Drawing.Point(47, 212);
+            this.btnRotateHorizantal.Location = new System.Drawing.Point(111, 212);
             this.btnRotateHorizantal.Margin = new System.Windows.Forms.Padding(4);
             this.btnRotateHorizantal.Name = "btnRotateHorizantal";
             this.btnRotateHorizantal.Size = new System.Drawing.Size(163, 102);
             this.btnRotateHorizantal.TabIndex = 2;
             this.btnRotateHorizantal.Tag = "12";
-            this.btnRotateHorizantal.Text = "Rotate horizantal";
+            this.btnRotateHorizantal.Text = "Flip Horizantal";
             this.btnRotateHorizantal.UseVisualStyleBackColor = true;
             this.btnRotateHorizantal.Click += new System.EventHandler(this.btnRotateHorizantal_Click);
             // 
             // btnRotatevertical
             // 
-            this.btnRotatevertical.Location = new System.Drawing.Point(298, 212);
+            this.btnRotatevertical.Location = new System.Drawing.Point(362, 212);
             this.btnRotatevertical.Margin = new System.Windows.Forms.Padding(4);
             this.btnRotatevertical.Name = "btnRotatevertical";
             this.btnRotatevertical.Size = new System.Drawing.Size(163, 102);
             this.btnRotatevertical.TabIndex = 1;
             this.btnRotatevertical.Tag = "13";
-            this.btnRotatevertical.Text = "Rotate vertical";
+            this.btnRotatevertical.Text = "Flip Vertical";
             this.btnRotatevertical.UseVisualStyleBackColor = true;
             this.btnRotatevertical.Click += new System.EventHandler(this.btnRotatevertical_Click);
             // 
             // btnRotateLeft
             // 
-            this.btnRotateLeft.Location = new System.Drawing.Point(47, 42);
+            this.btnRotateLeft.Location = new System.Drawing.Point(111, 42);
             this.btnRotateLeft.Margin = new System.Windows.Forms.Padding(4);
             this.btnRotateLeft.Name = "btnRotateLeft";
             this.btnRotateLeft.Size = new System.Drawing.Size(163, 102);
             this.btnRotateLeft.TabIndex = 0;
             this.btnRotateLeft.Tag = "10";
-            this.btnRotateLeft.Text = "Rotate left";
+            this.btnRotateLeft.Text = "Rotate Left";
             this.btnRotateLeft.UseVisualStyleBackColor = true;
             this.btnRotateLeft.Click += new System.EventHandler(this.btnRotateLeft_Click);
             // 
@@ -468,7 +463,7 @@ namespace iPrint
             this.tabPage6.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPage6.Name = "tabPage6";
             this.tabPage6.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabPage6.Size = new System.Drawing.Size(564, 396);
+            this.tabPage6.Size = new System.Drawing.Size(658, 383);
             this.tabPage6.TabIndex = 5;
             this.tabPage6.Text = "Frame";
             this.tabPage6.UseVisualStyleBackColor = true;
@@ -484,6 +479,7 @@ namespace iPrint
             this.tBarFrameWidth.TabIndex = 7;
             this.tBarFrameWidth.Tag = "15";
             this.tBarFrameWidth.Scroll += new System.EventHandler(this.tBarFrameWidth_Scroll);
+            this.tBarFrameWidth.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tBarFrameWidth_MouseDown);
             this.tBarFrameWidth.MouseUp += new System.Windows.Forms.MouseEventHandler(this.tBarFrameWidth_MouseUp);
             // 
             // numericUpDown1
@@ -531,10 +527,11 @@ namespace iPrint
             // 
             // tabPage7
             // 
+            this.tabPage7.Controls.Add(this.Label5);
+            this.tabPage7.Controls.Add(this.TrackBarBrightness);
             this.tabPage7.Controls.Add(this.butInvertColour);
             this.tabPage7.Controls.Add(this.tBarGaussianBlur);
             this.tabPage7.Controls.Add(this.label9);
-            this.tabPage7.Controls.Add(this.butGaussianBlur);
             this.tabPage7.Controls.Add(this.butJitter);
             this.tabPage7.Controls.Add(this.butPixellate);
             this.tabPage7.Controls.Add(this.butSepia);
@@ -542,16 +539,42 @@ namespace iPrint
             this.tabPage7.Location = new System.Drawing.Point(4, 29);
             this.tabPage7.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPage7.Name = "tabPage7";
-            this.tabPage7.Size = new System.Drawing.Size(564, 396);
+            this.tabPage7.Size = new System.Drawing.Size(658, 383);
             this.tabPage7.TabIndex = 6;
             this.tabPage7.Text = "Effects";
             this.tabPage7.UseVisualStyleBackColor = true;
             // 
+            // Label5
+            // 
+            this.Label5.AutoSize = true;
+            this.Label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label5.Location = new System.Drawing.Point(19, 301);
+            this.Label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.Label5.Name = "Label5";
+            this.Label5.Size = new System.Drawing.Size(78, 18);
+            this.Label5.TabIndex = 17;
+            this.Label5.Text = "Brightness";
+            // 
+            // TrackBarBrightness
+            // 
+            this.TrackBarBrightness.BackColor = System.Drawing.Color.White;
+            this.TrackBarBrightness.Location = new System.Drawing.Point(10, 323);
+            this.TrackBarBrightness.Margin = new System.Windows.Forms.Padding(4);
+            this.TrackBarBrightness.Maximum = 100;
+            this.TrackBarBrightness.Minimum = -100;
+            this.TrackBarBrightness.Name = "TrackBarBrightness";
+            this.TrackBarBrightness.Size = new System.Drawing.Size(638, 56);
+            this.TrackBarBrightness.TabIndex = 16;
+            this.TrackBarBrightness.Tag = "10";
+            this.TrackBarBrightness.Scroll += new System.EventHandler(this.TrackBarBrightness_Scroll);
+            this.TrackBarBrightness.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TrackBarBrightness_MouseDown);
+            this.TrackBarBrightness.MouseUp += new System.Windows.Forms.MouseEventHandler(this.TrackBarBrightness_MouseUp);
+            // 
             // butInvertColour
             // 
-            this.butInvertColour.Location = new System.Drawing.Point(17, 276);
+            this.butInvertColour.Location = new System.Drawing.Point(538, 27);
             this.butInvertColour.Name = "butInvertColour";
-            this.butInvertColour.Size = new System.Drawing.Size(109, 101);
+            this.butInvertColour.Size = new System.Drawing.Size(110, 110);
             this.butInvertColour.TabIndex = 15;
             this.butInvertColour.Text = "Invert Colour";
             this.butInvertColour.UseVisualStyleBackColor = true;
@@ -559,11 +582,15 @@ namespace iPrint
             // 
             // tBarGaussianBlur
             // 
-            this.tBarGaussianBlur.Location = new System.Drawing.Point(22, 214);
+            this.tBarGaussianBlur.BackColor = System.Drawing.Color.White;
+            this.tBarGaussianBlur.Location = new System.Drawing.Point(10, 214);
             this.tBarGaussianBlur.Maximum = 100;
             this.tBarGaussianBlur.Name = "tBarGaussianBlur";
-            this.tBarGaussianBlur.Size = new System.Drawing.Size(384, 56);
+            this.tBarGaussianBlur.Size = new System.Drawing.Size(638, 56);
             this.tBarGaussianBlur.TabIndex = 14;
+            this.tBarGaussianBlur.Scroll += new System.EventHandler(this.tBarGaussianBlur_Scroll);
+            this.tBarGaussianBlur.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tBarGaussianBlur_MouseDown);
+            this.tBarGaussianBlur.MouseUp += new System.Windows.Forms.MouseEventHandler(this.tBarGaussianBlur_MouseUp);
             // 
             // label9
             // 
@@ -577,19 +604,9 @@ namespace iPrint
             this.label9.Tag = "";
             this.label9.Text = "Gaussian Blur";
             // 
-            // butGaussianBlur
-            // 
-            this.butGaussianBlur.Location = new System.Drawing.Point(412, 204);
-            this.butGaussianBlur.Name = "butGaussianBlur";
-            this.butGaussianBlur.Size = new System.Drawing.Size(110, 93);
-            this.butGaussianBlur.TabIndex = 4;
-            this.butGaussianBlur.Text = "OK";
-            this.butGaussianBlur.UseVisualStyleBackColor = true;
-            this.butGaussianBlur.Click += new System.EventHandler(this.butGaussianBlur_Click);
-            // 
             // butJitter
             // 
-            this.butJitter.Location = new System.Drawing.Point(412, 27);
+            this.butJitter.Location = new System.Drawing.Point(406, 27);
             this.butJitter.Name = "butJitter";
             this.butJitter.Size = new System.Drawing.Size(110, 110);
             this.butJitter.TabIndex = 3;
@@ -599,7 +616,7 @@ namespace iPrint
             // 
             // butPixellate
             // 
-            this.butPixellate.Location = new System.Drawing.Point(281, 27);
+            this.butPixellate.Location = new System.Drawing.Point(274, 27);
             this.butPixellate.Name = "butPixellate";
             this.butPixellate.Size = new System.Drawing.Size(110, 110);
             this.butPixellate.TabIndex = 2;
@@ -609,7 +626,7 @@ namespace iPrint
             // 
             // butSepia
             // 
-            this.butSepia.Location = new System.Drawing.Point(16, 27);
+            this.butSepia.Location = new System.Drawing.Point(10, 27);
             this.butSepia.Name = "butSepia";
             this.butSepia.Size = new System.Drawing.Size(110, 110);
             this.butSepia.TabIndex = 1;
@@ -619,7 +636,7 @@ namespace iPrint
             // 
             // btnGrayScale
             // 
-            this.btnGrayScale.Location = new System.Drawing.Point(147, 27);
+            this.btnGrayScale.Location = new System.Drawing.Point(142, 27);
             this.btnGrayScale.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnGrayScale.Name = "btnGrayScale";
             this.btnGrayScale.Size = new System.Drawing.Size(110, 110);
@@ -647,7 +664,7 @@ namespace iPrint
             this.tabPage8.Location = new System.Drawing.Point(4, 29);
             this.tabPage8.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPage8.Name = "tabPage8";
-            this.tabPage8.Size = new System.Drawing.Size(564, 396);
+            this.tabPage8.Size = new System.Drawing.Size(658, 383);
             this.tabPage8.TabIndex = 7;
             this.tabPage8.Text = "Passport Picture";
             this.tabPage8.UseVisualStyleBackColor = true;
@@ -826,40 +843,6 @@ namespace iPrint
             this.radBtnX4.UseVisualStyleBackColor = true;
             this.radBtnX4.CheckedChanged += new System.EventHandler(this.radBtnX4_CheckedChanged);
             // 
-            // panel1
-            // 
-            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panel1.Controls.Add(this.buttRedo);
-            this.panel1.Controls.Add(this.buttUndo);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 429);
-            this.panel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(572, 130);
-            this.panel1.TabIndex = 2;
-            // 
-            // buttRedo
-            // 
-            this.buttRedo.Enabled = false;
-            this.buttRedo.Location = new System.Drawing.Point(381, 10);
-            this.buttRedo.Name = "buttRedo";
-            this.buttRedo.Size = new System.Drawing.Size(177, 113);
-            this.buttRedo.TabIndex = 10;
-            this.buttRedo.Text = "Redo";
-            this.buttRedo.UseVisualStyleBackColor = true;
-            this.buttRedo.Click += new System.EventHandler(this.buttRedo_Click);
-            // 
-            // buttUndo
-            // 
-            this.buttUndo.Enabled = false;
-            this.buttUndo.Location = new System.Drawing.Point(165, 8);
-            this.buttUndo.Name = "buttUndo";
-            this.buttUndo.Size = new System.Drawing.Size(182, 115);
-            this.buttUndo.TabIndex = 9;
-            this.buttUndo.Text = "Undo";
-            this.buttUndo.UseVisualStyleBackColor = true;
-            this.buttUndo.Click += new System.EventHandler(this.buttUndo_Click);
-            // 
             // panelFilmStripMain
             // 
             this.panelFilmStripMain.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
@@ -935,13 +918,11 @@ namespace iPrint
             this.panelMainPic.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.PicBoxEdit)).EndInit();
             this.panelEdit.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
             this.TabControl1.ResumeLayout(false);
             this.TabPage1.ResumeLayout(false);
             this.TabPage1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tBarResize)).EndInit();
-            this.TabPage2.ResumeLayout(false);
-            this.TabPage2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.TrackBarBrightness)).EndInit();
             this.TabPage4.ResumeLayout(false);
             this.tabPage6.ResumeLayout(false);
             this.tabPage6.PerformLayout();
@@ -949,12 +930,12 @@ namespace iPrint
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.tabPage7.ResumeLayout(false);
             this.tabPage7.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.TrackBarBrightness)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tBarGaussianBlur)).EndInit();
             this.tabPage8.ResumeLayout(false);
             this.tabPage8.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.panel1.ResumeLayout(false);
             this.panelFilmStripMain.ResumeLayout(false);
             this.panelFilmStrip.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -977,18 +958,23 @@ namespace iPrint
         private Panel panelMainPic;
         internal PictureBox PicBoxEdit;
         private Panel panelEdit;
+        private Panel panel1;
+        private Button buttRedo;
+        private Button buttUndo;
+        private Button butApply;
         internal TabControl TabControl1;
         internal TabPage TabPage1;
+        internal Label label3;
+        private Button butCancelCrop;
+        private Button butApplyCrop;
+        private TrackBar tBarResize;
+        private Button btnCrop;
         internal Label Label7;
         internal Label lbloriginalSize;
         internal Label lblModifiedSize;
         internal Label Label4;
         internal Label Label2;
         internal Label Label1;
-        internal TabPage TabPage2;
-        internal Label Label5;
-        internal DomainUpDown DomainUpDownBrightness;
-        internal TrackBar TrackBarBrightness;
         internal TabPage TabPage4;
         internal Button btnRotateRight;
         internal Button btnRotateHorizantal;
@@ -1001,39 +987,32 @@ namespace iPrint
         private Label label6;
         private Button butFrameColor;
         private TabPage tabPage7;
+        internal Label Label5;
+        internal TrackBar TrackBarBrightness;
+        private Button butInvertColour;
+        private TrackBar tBarGaussianBlur;
+        internal Label label9;
+        private Button butJitter;
+        private Button butPixellate;
+        private Button butSepia;
         private Button btnGrayScale;
-        private Panel panel1;
         private TabPage tabPage8;
-        private Button btnCrop;
-        private Button btnPPSize;
-        private Label label16;
-        private Label label17;
-        private Label label15;
-        private Label label14;
+        private Button btnApplyPP;
         private Label label22;
         private Label label23;
         private Label label20;
         private Label label21;
         private Label label18;
         private Label label19;
+        private Label label16;
+        private Label label17;
+        private Label label15;
+        private Label label14;
+        private Button btnPPSize;
         private GroupBox groupBox1;
         private RadioButton radBtnX12;
         private RadioButton radBtnX8;
         private RadioButton radBtnX4;
-        private Button btnApplyPP;
-        private TrackBar tBarResize;
-        internal Label label3;
-        private Button butCancelCrop;
-        private Button butApplyCrop;
-        private Button buttRedo;
-        private Button buttUndo;
-        private Button butSepia;
-        private Button butPixellate;
-        private Button butJitter;
-        private Button butGaussianBlur;
-        private TrackBar tBarGaussianBlur;
-        internal Label label9;
-        private Button butInvertColour;
 
     }
 }
