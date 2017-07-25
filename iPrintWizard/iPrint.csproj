@@ -275,6 +275,15 @@
     <EmbeddedResource Include="Redo.bmp" />
     <EmbeddedResource Include="Undo.bmp" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Apply.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\5iRepAKrT.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Flower1.bmp" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -84,8 +84,6 @@ namespace iPrint
             this.btnGrayScale = new System.Windows.Forms.Button();
             this.tabPage8 = new System.Windows.Forms.TabPage();
             this.btnApplyPP = new System.Windows.Forms.Button();
-            this.label22 = new System.Windows.Forms.Label();
-            this.label23 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
@@ -193,12 +191,14 @@ namespace iPrint
             // 
             // butApply
             // 
-            this.butApply.Location = new System.Drawing.Point(425, 10);
+            this.butApply.BackColor = System.Drawing.Color.White;
+            this.butApply.Location = new System.Drawing.Point(490, 10);
             this.butApply.Name = "butApply";
-            this.butApply.Size = new System.Drawing.Size(219, 115);
+            this.butApply.Size = new System.Drawing.Size(154, 115);
             this.butApply.TabIndex = 11;
             this.butApply.Text = "Apply";
-            this.butApply.UseVisualStyleBackColor = true;
+            this.butApply.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.butApply.UseVisualStyleBackColor = false;
             // 
             // buttRedo
             // 
@@ -649,8 +649,6 @@ namespace iPrint
             // tabPage8
             // 
             this.tabPage8.Controls.Add(this.btnApplyPP);
-            this.tabPage8.Controls.Add(this.label22);
-            this.tabPage8.Controls.Add(this.label23);
             this.tabPage8.Controls.Add(this.label20);
             this.tabPage8.Controls.Add(this.label21);
             this.tabPage8.Controls.Add(this.label18);
@@ -671,49 +669,30 @@ namespace iPrint
             // 
             // btnApplyPP
             // 
-            this.btnApplyPP.Location = new System.Drawing.Point(349, 316);
+            this.btnApplyPP.Location = new System.Drawing.Point(349, 279);
             this.btnApplyPP.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnApplyPP.Name = "btnApplyPP";
             this.btnApplyPP.Size = new System.Drawing.Size(140, 72);
             this.btnApplyPP.TabIndex = 12;
             this.btnApplyPP.Tag = "21";
-            this.btnApplyPP.Text = "Apply";
+            this.btnApplyPP.Text = "Create";
             this.btnApplyPP.UseVisualStyleBackColor = true;
             this.btnApplyPP.Click += new System.EventHandler(this.btnApplyPP_Click);
-            // 
-            // label22
-            // 
-            this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(12, 197);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(346, 20);
-            this.label22.TabIndex = 10;
-            this.label22.Text = "Click the \"Crop\" button to apply your changes";
-            // 
-            // label23
-            // 
-            this.label23.AutoSize = true;
-            this.label23.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.label23.Location = new System.Drawing.Point(12, 178);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(57, 20);
-            this.label23.TabIndex = 9;
-            this.label23.Text = "Step3:";
             // 
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(12, 342);
+            this.label20.Location = new System.Drawing.Point(12, 309);
             this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(104, 20);
+            this.label20.Size = new System.Drawing.Size(113, 20);
             this.label20.TabIndex = 8;
-            this.label20.Text = "Click \"Apply\"";
+            this.label20.Text = "Click \"Create\"";
             // 
             // label21
             // 
             this.label21.AutoSize = true;
             this.label21.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.label21.Location = new System.Drawing.Point(12, 322);
+            this.label21.Location = new System.Drawing.Point(12, 289);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(57, 20);
             this.label21.TabIndex = 7;
@@ -722,7 +701,7 @@ namespace iPrint
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(12, 242);
+            this.label18.Location = new System.Drawing.Point(12, 178);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(284, 20);
             this.label18.TabIndex = 6;
@@ -732,11 +711,11 @@ namespace iPrint
             // 
             this.label19.AutoSize = true;
             this.label19.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.label19.Location = new System.Drawing.Point(12, 223);
+            this.label19.Location = new System.Drawing.Point(12, 159);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(57, 20);
             this.label19.TabIndex = 5;
-            this.label19.Text = "Step4:";
+            this.label19.Text = "Step3:";
             // 
             // label16
             // 
@@ -793,7 +772,7 @@ namespace iPrint
             this.groupBox1.Controls.Add(this.radBtnX12);
             this.groupBox1.Controls.Add(this.radBtnX8);
             this.groupBox1.Controls.Add(this.radBtnX4);
-            this.groupBox1.Location = new System.Drawing.Point(18, 258);
+            this.groupBox1.Location = new System.Drawing.Point(18, 194);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -998,8 +977,6 @@ namespace iPrint
         private Button btnGrayScale;
         private TabPage tabPage8;
         private Button btnApplyPP;
-        private Label label22;
-        private Label label23;
         private Label label20;
         private Label label21;
         private Label label18;

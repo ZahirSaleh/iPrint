@@ -100,20 +100,29 @@ namespace iPrint
             Stream StreamUndo = myAssembly.GetManifestResourceStream("iPrint.Undo.bmp");
             Bitmap imageUndo = new Bitmap(StreamUndo);
             buttUndo.Image = imageUndo;
+            // Align the image and text on the button.
+            buttUndo.ImageAlign = ContentAlignment.MiddleRight;
+            buttUndo.TextAlign = ContentAlignment.MiddleLeft;
+            // Give the button a flat appearance.
+            buttUndo.FlatStyle = FlatStyle.Flat;
 
             Stream StreamRedo = myAssembly.GetManifestResourceStream("iPrint.Redo.bmp");
             Bitmap imageRedo = new Bitmap(StreamRedo);
             buttRedo.Image = imageRedo;
-
             // Align the image and text on the button.
-            buttUndo.ImageAlign = ContentAlignment.MiddleRight;
             buttRedo.ImageAlign = ContentAlignment.MiddleRight;
-
-            buttUndo.TextAlign = ContentAlignment.MiddleLeft;
             buttRedo.TextAlign = ContentAlignment.MiddleLeft;
             // Give the button a flat appearance.
-            buttUndo.FlatStyle = FlatStyle.Flat;
             buttRedo.FlatStyle = FlatStyle.Flat;
+
+            Stream StreamApply = myAssembly.GetManifestResourceStream("iPrint.Apply.png");
+            Bitmap imageApply = new Bitmap(StreamApply);
+            butApply.Image = imageApply;
+            // Align the image and text on the button.
+            butApply.ImageAlign = ContentAlignment.MiddleRight;
+            butApply.TextAlign = ContentAlignment.MiddleLeft;
+            // Give the button a flat appearance.
+            butApply.FlatStyle = FlatStyle.Flat;           
         }
 
         private void LoadImage(String Filename)
@@ -595,6 +604,9 @@ namespace iPrint
         private void btnApplyPP_Click(object sender, EventArgs e)
         {
             clsGlobalFunctions.CollectStatistics(sender);
+
+            butApplyCrop_Click(sender, e);
+
             using(Bitmap bm_source = new Bitmap(PicBoxEdit.Image))
             {
 
@@ -607,8 +619,8 @@ namespace iPrint
                 clsGlobalVariables.PicsToExclude.Add(FilePath);
                 FilePath = FilePath.Replace(".", "_PP_1.");
                 PicBoxEdit.Tag = FilePath;
-
-                PicBoxEdit.Invalidate();
+                UpdatePictureBox();
+                //PicBoxEdit.Invalidate();
             }
         }
 
@@ -620,23 +632,23 @@ namespace iPrint
                 crop = true;
                 passport = true;
                 DrawPassportBox();
-                PicBoxEdit.Invalidate();
+                UpdatePictureBox(); //PicBoxEdit.Invalidate();
                 //btnCrop.Text = "Apply";
-                butApplyCrop.Visible = true;
-                butCancelCrop.Visible = true;
-                btnCrop.Visible = false;  
-
+               // butApplyCrop.Visible = true;
+                //butCancelCrop.Visible = true;
+                //btnCrop.Visible = false;  
+                
                 btnPPSize.Text = "Cancel PP Size";
             }
             else
             {
                 crop = false;
-                passport = false;                
-                PicBoxEdit.Invalidate();
+                passport = false;
+                UpdatePictureBox(); //PicBoxEdit.Invalidate();
                 //btnCrop.Text = "Crop";
-                butApplyCrop.Visible = false;
-                butCancelCrop.Visible = false;
-                btnCrop.Visible = true;  
+               // butApplyCrop.Visible = false;
+               // butCancelCrop.Visible = false;
+               // btnCrop.Visible = true;  
                 btnPPSize.Text = "Passport Size";
             }
         }
@@ -887,9 +899,7 @@ namespace iPrint
         private void tBarGaussianBlur_MouseUp(object sender, MouseEventArgs e)
         {
             RChanges.Clear(); 
-        }
-
-       
+        }       
 
 	}
 }
